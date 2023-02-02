@@ -9,6 +9,7 @@ public interface IVoxelBodyDestroyPolicy
     public float MinimumDestroyPersent { get; }
 
 
+
     public void SetMinimumDestroyPersent(float value);
 
     public void HandleChanges();
