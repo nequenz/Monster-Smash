@@ -24,16 +24,16 @@ public class VoxelBody : IVoxelBody
 
     public void SetDestroyPolicy(IVoxelBodyDestroyPolicy policy)
     {
-        throw new NotImplementedException();
+        //TO-DO
     }
 
     public void GetVoxel(Vector3Int position)
     {
-        throw new NotImplementedException();
+        //TO-DO
     }
 
     public void SetVoxel(Vector3Int position, byte value)
     {
-        throw new NotImplementedException();
+        //TO-DO
     }
 }
