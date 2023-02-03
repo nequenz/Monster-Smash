@@ -24,8 +24,6 @@ public class BodyPart : MonoBehaviour
     {
         _rigid = GetComponent<Rigidbody>();
 
-        _voxelBody.SetDestroyPolicy(_voxelPolicy);
-
         if (_parent is not null)
             _parent.Detached += OnParentDetach;
     }
