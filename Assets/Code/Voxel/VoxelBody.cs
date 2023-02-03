@@ -3,7 +3,6 @@ using System;
 
 public class VoxelBody : IVoxelBody
 {
-    private IVoxelBodyDestroyPolicy _policy;
     private bool _canBeReallocated = false;
     private byte[,,] _voxel;
 
@@ -11,7 +10,6 @@ public class VoxelBody : IVoxelBody
     public event Action<Vector3> Changed;
 
 
-    public IVoxelBodyDestroyPolicy DestroyPolicy => _policy;
     public bool CanBeReallocated => _canBeReallocated;
 
     public void Allocate(Vector3Int size)
@@ -20,11 +18,6 @@ public class VoxelBody : IVoxelBody
             throw new ArgumentOutOfRangeException("Wrong params of allocation size");
 
         _voxel = new byte[size.x, size.y, size.z];
-    }
-
-    public void SetDestroyPolicy(IVoxelBodyDestroyPolicy policy)
-    {
-        //TO-DO
     }
 
     public void GetVoxel(Vector3Int position)
