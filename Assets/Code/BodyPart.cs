@@ -6,7 +6,7 @@ using System;
 [RequireComponent(typeof(Collider))]
 public class BodyPart : MonoBehaviour
 {
-    [SerializeReference] private IVoxelBody _voxelBody = new VoxelBody();
+    [SerializeReference] private IVoxelData _voxelBody = new VoxelData();
     [SerializeReference] private IVoxelBodyDestroyPolicy _voxelPolicy = new VoxelBodyDestroyPolicy();
     [SerializeField] private BodyPart _parent;
     [SerializeField] private bool _isRootMain = false;
