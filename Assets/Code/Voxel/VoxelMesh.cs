@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System;
 
-
 public class VoxelMesh : IVoxelMesh
 {
     private Mesh _mesh;
@@ -9,25 +8,6 @@ public class VoxelMesh : IVoxelMesh
     private float _sizeFactor = 0.25f;
     private bool _isDirty = false;
     private float _rebuildDelay = 0.25f;
-    private Vector3[] _voxelSideVerticies = 
-    {
-        new Vector3(0,0,0),
-        new Vector3(1,0,0),
-        new Vector3(0,0,1),
-        new Vector3(1,0,1),
-    };
-    private Vector3[] _voxelSideNormals =
-    {
-        Vector3.up,
-        Vector3.up,
-        Vector3.up,
-        Vector3.up,
-    };
-    private int[] _voxelSideTriangles =
-    {
-        0,1,2,
-        2,3,1
-    };
 
 
     public event Action Changed;
@@ -44,23 +24,26 @@ public class VoxelMesh : IVoxelMesh
     private void AddPlane(Vector3 position, Quaternion rotation)
     {
         float _sideCenter = -_sizeFactor / 2;
-
         Vector3 offset = new Vector3(_sideCenter, 0, _sideCenter);
+        Vector3[] verticies = VoxelMeshInfo.GetVertices();
+        Vector3[] normals = VoxelMeshInfo.GetNormals();
+        int[] triangles = VoxelMeshInfo.GetTriangles();
 
-        for(int i = 0; i < _voxelSideVerticies.Length; i++)
+        for (int i = 0; i < verticies.Length; i++)
         {
-            _voxelSideVerticies[i] = rotation * (_voxelSideVerticies[i] * _sizeFactor + offset);
-            _voxelSideNormals[i] = rotation * _voxelSideNormals[i];
+            verticies[i] = rotation * (verticies[i] * _sizeFactor + offset);
+            normals[i] = rotation * normals[i];
         }
-            
-        _mesh.vertices = _voxelSideVerticies;
-        _mesh.triangles = _voxelSideTriangles;
-        _mesh.normals = _voxelSideNormals;
+
+        MeshAllocator.AddVerticies(verticies);
+        MeshAllocator.AddNormals(normals);
+        MeshAllocator.AddTriangles(triangles);
     }
 
     public void CreateNewMesh()
     {
         _mesh = new Mesh();
+        _isDirty = true;
     }
 
     public void SetVoxelBody(IVoxelData body)
@@ -70,10 +53,26 @@ public class VoxelMesh : IVoxelMesh
         Changed?.Invoke();
     }
 
-    public void SetSize(float size) => _sizeFactor = size;
+    public void SetSize(float size)
+    {
+        _sizeFactor = size;
+        _isDirty = true;
+    }
 
     public void Rebuild()
     {
+        MeshAllocator.NewBuild();
+
+        for(int i = 0; i < _body.Size.x; i ++)
+        {
+            for (int k = 0; k < _body.Size.z; k++)
+            {
+                for (int j = 0; j < _body.Size.y; j++)
+                {
+
+                }
+            }
+        }
 
         _isDirty = false;
         Rebuilt?.Invoke();
