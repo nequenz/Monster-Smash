@@ -28,7 +28,7 @@ public class VoxelData : IVoxelData
         if(size.x < 0 || size.y < 0 || size.z < 0)
             throw new ArgumentOutOfRangeException("Wrong params of allocation size");
 
-        if (_canBeReallocated == false)
+        if (_canBeReallocated == false && _voxel is not null)
             return;
 
         _voxel = new byte[size.x, size.y, size.z];

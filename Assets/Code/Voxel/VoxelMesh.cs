@@ -64,7 +64,6 @@ public class VoxelMesh : IVoxelMesh
     {
         _body = body;
         _isDirty = true;
-        _currentDelay += _rebuildDelay;
         Changed?.Invoke();
     }
 
@@ -92,23 +91,26 @@ public class VoxelMesh : IVoxelMesh
                 {
                     currentPosition.Set(x, y, z);
 
-                    if(_body.GetVoxel(x, y + 1 ,z) == IVoxelData.EmptyVoxel)
-                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.TopSide);
+                    if(_body.GetVoxel(currentPosition) != IVoxelData.EmptyVoxel)
+                    {
+                        if (_body.GetVoxel(x, y + 1, z) == IVoxelData.EmptyVoxel)
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.TopSide);
 
-                    if (_body.GetVoxel(x, y - 1, z) == IVoxelData.EmptyVoxel)
-                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.BottomSide);
+                        if (_body.GetVoxel(x, y - 1, z) == IVoxelData.EmptyVoxel)
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.BottomSide);
 
-                    if (_body.GetVoxel(x + 1, y, z) == IVoxelData.EmptyVoxel)
-                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.RightSide);
+                        if (_body.GetVoxel(x + 1, y, z) == IVoxelData.EmptyVoxel)
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.RightSide);
 
-                    if (_body.GetVoxel(x - 1, y, z) == IVoxelData.EmptyVoxel)
-                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.LeftSide);
+                        if (_body.GetVoxel(x - 1, y, z) == IVoxelData.EmptyVoxel)
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.LeftSide);
 
-                    if (_body.GetVoxel(x, y, z - 1) == IVoxelData.EmptyVoxel)
-                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.FrontSide);
+                        if (_body.GetVoxel(x, y, z - 1) == IVoxelData.EmptyVoxel)
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.FrontSide);
 
-                    if (_body.GetVoxel(x, y, z + 1) == IVoxelData.EmptyVoxel)
-                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.BackSide);
+                        if (_body.GetVoxel(x, y, z + 1) == IVoxelData.EmptyVoxel)
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.BackSide);
+                    }
                 }
             }
         }
