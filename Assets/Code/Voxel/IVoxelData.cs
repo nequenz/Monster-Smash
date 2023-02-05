@@ -3,6 +3,9 @@ using System;
 
 public interface IVoxelData
 {
+    public const int EmptyVoxel = 0x0;
+
+
     public event Action<Vector3> Collided;
     public event Action<Vector3> Changed;
 
@@ -13,7 +16,7 @@ public interface IVoxelData
 
     public void Allocate(Vector3Int size);
 
-    public void SetVoxel(Vector3Int position, byte value);
+    public void SetVoxel(Vector3Int position, int value);
 
-    public byte GetVoxel(Vector3Int position);
+    public int GetVoxel(Vector3Int position);
 }

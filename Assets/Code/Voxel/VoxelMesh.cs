@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System;
 
+
 public class VoxelMesh : IVoxelMesh
 {
     private Mesh _mesh;
     private IVoxelData _body;
-    private float _sizeFactor = 0.25f;
+    private float _sizeFactor = 1f;
     private bool _isDirty = false;
     private float _rebuildDelay = 0.25f;
 
@@ -21,21 +22,28 @@ public class VoxelMesh : IVoxelMesh
     public float RebuildDelay => _rebuildDelay;
 
 
-    private void AddPlane(Vector3 position, Quaternion rotation)
+    public void AddPlane(Vector3 position, Quaternion rotation)
     {
         float _sideCenter = -_sizeFactor / 2;
-        Vector3 offset = new Vector3(_sideCenter, 0, _sideCenter);
-        Vector3[] verticies = VoxelMeshInfo.GetVertices();
-        Vector3[] normals = VoxelMeshInfo.GetNormals();
-        int[] triangles = VoxelMeshInfo.GetTriangles();
+        Vector3 offset = new Vector3(_sideCenter, -_sideCenter, _sideCenter);
+        Vector3[] vertices = new Vector3[VoxelMeshInfo.SideVertexCount];
+        Vector3[] normals = new Vector3[VoxelMeshInfo.SideVertexCount];
+        int[] triangles = new int[VoxelMeshInfo.SideTriangleCount];
 
-        for (int i = 0; i < verticies.Length; i++)
+        VoxelMeshInfo.SetVertices(ref vertices);
+        VoxelMeshInfo.SetNormals(ref normals);
+        VoxelMeshInfo.SetTriangles(ref triangles);
+
+        for (int i = 0; i < vertices.Length; i++)
         {
-            verticies[i] = rotation * (verticies[i] * _sizeFactor + offset);
+            vertices[i] = rotation * (vertices[i] * _sizeFactor + offset) + position * _sizeFactor;
             normals[i] = rotation * normals[i];
         }
 
-        MeshAllocator.AddVerticies(verticies);
+        for(int i = 0; i < triangles.Length; i ++)
+            triangles[i] = triangles[i] + MeshAllocator.VertexCount;
+
+        MeshAllocator.AddVertices(vertices);
         MeshAllocator.AddNormals(normals);
         MeshAllocator.AddTriangles(triangles);
     }
@@ -61,15 +69,24 @@ public class VoxelMesh : IVoxelMesh
 
     public void Rebuild()
     {
-        MeshAllocator.NewBuild();
+        Vector3Int voxelPosition = Vector3Int.zero;
+        Vector3Int currentPosition = Vector3Int.zero;
 
-        for(int i = 0; i < _body.Size.x; i ++)
+        for (int i = 0; i < _body.Size.x; i ++)
         {
             for (int k = 0; k < _body.Size.z; k++)
             {
                 for (int j = 0; j < _body.Size.y; j++)
                 {
+                    currentPosition.Set(i, j, k);
+                    voxelPosition.x = i;
+                    voxelPosition.z = k;
+                    voxelPosition.y = j - 1;
 
+                    if(_body.GetVoxel(voxelPosition) == IVoxelData.EmptyVoxel)
+                    {
+                        //AddPlane(currentPosition, );
+                    }
                 }
             }
         }
