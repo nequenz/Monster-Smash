@@ -8,7 +8,6 @@ public class VoxelData : IVoxelData
     private Vector3 _size;
 
 
-    public event Action<Vector3> Collided;
     public event Action<Vector3> Changed;
 
 
@@ -28,6 +27,9 @@ public class VoxelData : IVoxelData
     {
         if(size.x < 0 || size.y < 0 || size.z < 0)
             throw new ArgumentOutOfRangeException("Wrong params of allocation size");
+
+        if (_canBeReallocated == false)
+            return;
 
         _voxel = new byte[size.x, size.y, size.z];
         _size = size;

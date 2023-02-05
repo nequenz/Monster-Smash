@@ -7,8 +7,9 @@ public class VoxelMesh : IVoxelMesh
     private Mesh _mesh;
     private IVoxelData _body;
     private float _sizeFactor = 1f;
-    private bool _isDirty = false;
     private float _rebuildDelay = 0.25f;
+    private float _currentDelay = 0.0f;
+    private bool _isDirty = false;
 
 
     public event Action Changed;
@@ -22,7 +23,7 @@ public class VoxelMesh : IVoxelMesh
     public float RebuildDelay => _rebuildDelay;
 
 
-    public void AddPlane(Vector3 position, Quaternion rotation)
+    private void AddPlane(Vector3 position, Quaternion rotation)
     {
         float _sideCenter = -_sizeFactor / 2;
         Vector3 offset = new Vector3(_sideCenter, -_sideCenter, _sideCenter);
@@ -48,16 +49,22 @@ public class VoxelMesh : IVoxelMesh
         MeshAllocator.AddTriangles(triangles);
     }
 
-    public void CreateNewMesh()
+    public void Update(float deltaTime)
     {
-        _mesh = new Mesh();
-        _isDirty = true;
+        if(_currentDelay > 0.0f)
+        {
+            _currentDelay -= deltaTime;
+
+            if (_currentDelay <= 0.0f)
+                RebuildForced();
+        }
     }
 
     public void SetVoxelBody(IVoxelData body)
     {
         _body = body;
         _isDirty = true;
+        _currentDelay += _rebuildDelay;
         Changed?.Invoke();
     }
 
@@ -65,12 +72,16 @@ public class VoxelMesh : IVoxelMesh
     {
         _sizeFactor = size;
         _isDirty = true;
+        Changed?.Invoke();
     }
 
-    public void Rebuild()
+    public void RebuildForced()
     {
         Vector3Int voxelPosition = Vector3Int.zero;
         Vector3Int currentPosition = Vector3Int.zero;
+
+        if (_mesh is null)
+            _mesh = new();
 
         for (int i = 0; i < _body.Size.x; i ++)
         {

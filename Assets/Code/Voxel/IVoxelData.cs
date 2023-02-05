@@ -6,7 +6,6 @@ public interface IVoxelData
     public const int EmptyVoxel = 0x0;
 
 
-    public event Action<Vector3> Collided;
     public event Action<Vector3> Changed;
 
 

@@ -30,14 +30,12 @@ public class BodyPart : MonoBehaviour
 
     private void OnEnable()
     {
-        _voxelBody.Collided += OnVoxelBodyCollided;
         _voxelBody.Changed += OnVoxelBodyChanged;
         _voxelPolicy.Destoryed += OnVoxelBodyDestroyed;
     }
 
     private void OnDisable()
     {
-        _voxelBody.Collided -= OnVoxelBodyCollided;
         _voxelBody.Changed-= OnVoxelBodyChanged;
         _voxelPolicy.Destoryed -= OnVoxelBodyDestroyed;
     }
