@@ -35,6 +35,12 @@ public class VoxelData : IVoxelData
         _size = size;
     }
 
+    public void SetVoxel(Vector3Int position, int value)
+    {
+        if (IsAccessValid(position))
+            _voxel[position.x, position.y, position.z] = (byte)value;
+    }
+
     public int GetVoxel(Vector3Int position)
     {
         if (IsAccessValid(position))
@@ -43,9 +49,5 @@ public class VoxelData : IVoxelData
         return IVoxelData.EmptyVoxel;
     }
 
-    public void SetVoxel(Vector3Int position, int value)
-    {
-        if (IsAccessValid(position))
-            _voxel[position.x, position.y, position.z] = (byte)value;
-    }
+    public int GetVoxel(int x, int y, int z) => GetVoxel(new Vector3Int(x, y, z));
 }

@@ -77,32 +77,47 @@ public class VoxelMesh : IVoxelMesh
 
     public void RebuildForced()
     {
-        Vector3Int voxelPosition = Vector3Int.zero;
         Vector3Int currentPosition = Vector3Int.zero;
 
         if (_mesh is null)
             _mesh = new();
 
-        for (int i = 0; i < _body.Size.x; i ++)
-        {
-            for (int k = 0; k < _body.Size.z; k++)
-            {
-                for (int j = 0; j < _body.Size.y; j++)
-                {
-                    currentPosition.Set(i, j, k);
-                    voxelPosition.x = i;
-                    voxelPosition.z = k;
-                    voxelPosition.y = j - 1;
+        MeshAllocator.Clear();
 
-                    if(_body.GetVoxel(voxelPosition) == IVoxelData.EmptyVoxel)
-                    {
-                        //AddPlane(currentPosition, );
-                    }
+        for (int x = 0; x < _body.Size.x; x ++)
+        {
+            for (int z = 0; z < _body.Size.z; z++)
+            {
+                for (int y = 0; y < _body.Size.y; y++)
+                {
+                    currentPosition.Set(x, y, z);
+
+                    if(_body.GetVoxel(x, y + 1 ,z) == IVoxelData.EmptyVoxel)
+                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.TopSide);
+
+                    if (_body.GetVoxel(x, y - 1, z) == IVoxelData.EmptyVoxel)
+                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.BottomSide);
+
+                    if (_body.GetVoxel(x + 1, y, z) == IVoxelData.EmptyVoxel)
+                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.RightSide);
+
+                    if (_body.GetVoxel(x - 1, y, z) == IVoxelData.EmptyVoxel)
+                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.LeftSide);
+
+                    if (_body.GetVoxel(x, y, z - 1) == IVoxelData.EmptyVoxel)
+                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.FrontSide);
+
+                    if (_body.GetVoxel(x, y, z + 1) == IVoxelData.EmptyVoxel)
+                        AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.BackSide);
                 }
             }
         }
 
+        _mesh.vertices = MeshAllocator.CloneVertices();
+        _mesh.normals = MeshAllocator.CloneNormals();
+        _mesh.triangles = MeshAllocator.CloneTriangles();
         _isDirty = false;
+
         Rebuilt?.Invoke();
     }
 

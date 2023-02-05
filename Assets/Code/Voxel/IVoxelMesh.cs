@@ -20,4 +20,6 @@ public interface IVoxelMesh
     public void RebuildForced();
 
     public void SetSize(float size);
+
+    public void Update(float deltaTime);
 }

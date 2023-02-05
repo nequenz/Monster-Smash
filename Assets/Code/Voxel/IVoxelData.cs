@@ -18,4 +18,6 @@ public interface IVoxelData
     public void SetVoxel(Vector3Int position, int value);
 
     public int GetVoxel(Vector3Int position);
+
+    public int GetVoxel(int x, int y, int z);
 }

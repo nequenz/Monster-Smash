@@ -18,4 +18,9 @@ public class VoxelTest : MonoBehaviour
 
         _filter.mesh = _voxelMesh.BuiltMesh;
     }
+
+    private void Update()
+    {
+        _voxelMesh.Update(Time.deltaTime);
+    }
 }

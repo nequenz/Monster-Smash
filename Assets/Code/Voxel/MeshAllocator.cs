@@ -15,7 +15,7 @@ public static class MeshAllocator
     public static int TriangleCount => _triangles.Count;
 
 
-    public static void NewBuild()
+    public static void Clear()
     {
         _verticies.Clear();
         _normals.Clear();
