@@ -12,7 +12,7 @@ public class VoxelData : IVoxelData
     private byte[,,] _voxels;
     
 
-    public event Action<Vector3> Changed;
+    public event Action<Vector3Int> Changed;
 
 
     public bool CanBeReallocated => _canBeReallocated;
@@ -61,7 +61,11 @@ public class VoxelData : IVoxelData
     public void SetVoxel(Vector3Int position, int value)
     {
         if (IsAccessValid(position))
+        {
             _voxels[position.x, position.y, position.z] = (byte)value;
+
+            Changed?.Invoke(position);
+        }  
     }
 
     public int GetVoxel(Vector3Int position)

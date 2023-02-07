@@ -6,7 +6,7 @@ public interface IVoxelData
     public const int EmptyVoxel = 0x0;
 
 
-    public event Action<Vector3> Changed;
+    public event Action<Vector3Int> Changed;
 
 
     public bool CanBeReallocated { get; }

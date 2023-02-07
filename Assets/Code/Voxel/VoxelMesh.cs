@@ -80,6 +80,7 @@ public class VoxelMesh : IVoxelMesh
         if (_mesh is null)
             _mesh = new();
 
+        _mesh.Clear();
         MeshAllocator.Clear();
 
         for (int x = 0; x < _body.Size.x; x ++)

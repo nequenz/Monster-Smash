@@ -18,6 +18,7 @@ public class VoxelTest : MonoBehaviour
 
         _voxels.Allocate();
         _voxels.SetVoxel(new Vector3Int(0, 0, 0), 0);
+        _voxels.Changed += OnVoxelsChanged;
         _voxelMesh.SetVoxelBody(_voxels);
         _voxelMesh.RebuildForced();
         _voxelCollider.SetVoxelMesh(_voxelMesh);
@@ -25,16 +26,27 @@ public class VoxelTest : MonoBehaviour
 
         _collider.transform.localScale = _voxels.Size * _voxelMesh.SizeFactor;
         _filter.mesh = _voxelMesh.BuiltMesh;
+
+        transform.rotation *= Quaternion.AngleAxis(45, Vector3.up);
     }
 
     private void Update()
     {
+        Vector3Int voxelPosition;
+
         if(transform.position.GetDistance(_testObj.position) < 2)
         {
-            _voxelCollider.CalculateVoxelPosition(_testObj.position);
-            //Debug.DrawLine(transform.position, _testObj.transform.position, Color.red, 0.1f);
+            voxelPosition = _voxelCollider.CalculateVoxelPosition(_testObj.position);
+            _voxels.SetVoxel(voxelPosition, 0);
         }
-        //_voxelMesh.Update(Time.deltaTime);
+
         //transform.rotation *= Quaternion.AngleAxis(0.1f,Vector3.up);
+        //Debug.Log("Y:"+transform.rotation.eulerAngles.y);
+    }
+
+    private void OnVoxelsChanged(Vector3Int position)
+    {
+        //Debug.Log("!");
+        _voxelMesh.RebuildForced();
     }
 }

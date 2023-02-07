@@ -30,14 +30,12 @@ public class BodyPart : MonoBehaviour
 
     private void OnEnable()
     {
-        _voxelBody.Changed += OnVoxelBodyChanged;
-        _voxelPolicy.Destoryed += OnVoxelBodyDestroyed;
+
     }
 
     private void OnDisable()
     {
-        _voxelBody.Changed-= OnVoxelBodyChanged;
-        _voxelPolicy.Destoryed -= OnVoxelBodyDestroyed;
+
     }
 
     private void OnCollisionEnter(Collision otherCollision)
@@ -47,21 +45,6 @@ public class BodyPart : MonoBehaviour
         ///TEST
         if(otherCollision.collider.Is<Projectile>())
             Detach();
-    }
-
-    private void OnVoxelBodyCollided(Vector3 position)
-    {
-
-    }
-
-    private void OnVoxelBodyChanged(Vector3 position)
-    {
-
-    }
-
-    private void OnVoxelBodyDestroyed()
-    {
-        Detach();
     }
 
     private void OnParentDetach()
