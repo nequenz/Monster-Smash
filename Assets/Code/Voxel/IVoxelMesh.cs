@@ -17,6 +17,8 @@ public interface IVoxelMesh
 
     public void SetVoxelBody(IVoxelData body);
 
+    public void SetRebuildDelay(float delay);
+
     public void RebuildForced();
 
     public void SetSize(float size);

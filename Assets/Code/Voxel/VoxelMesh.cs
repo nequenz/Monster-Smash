@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System;
 
-
+[Serializable]
 public class VoxelMesh : IVoxelMesh
 {
+    [SerializeReference] private float _sizeFactor = 1f;
     private Mesh _mesh;
     private IVoxelData _body;
-    private float _sizeFactor = 1f;
     private float _rebuildDelay = 0.25f;
     private float _currentDelay = 0.0f;
     private bool _isDirty = false;
@@ -27,6 +27,7 @@ public class VoxelMesh : IVoxelMesh
     {
         float _sideCenter = -_sizeFactor / 2;
         Vector3 offset = new Vector3(_sideCenter, -_sideCenter, _sideCenter);
+        Vector3 validSize = new Vector3(_body.Size.x, -_body.Size.y, _body.Size.z);
         Vector3[] vertices = new Vector3[VoxelMeshInfo.SideVertexCount];
         Vector3[] normals = new Vector3[VoxelMeshInfo.SideVertexCount];
         int[] triangles = new int[VoxelMeshInfo.SideTriangleCount];
@@ -37,7 +38,9 @@ public class VoxelMesh : IVoxelMesh
 
         for (int i = 0; i < vertices.Length; i++)
         {
-            vertices[i] = rotation * (vertices[i] * _sizeFactor + offset) + position * _sizeFactor;
+            vertices[i] = (rotation * (vertices[i] * _sizeFactor + offset))
+                + (position * _sizeFactor) - offset
+                - (validSize * _sizeFactor) / 2;
             normals[i] = rotation * normals[i];
         }
 
@@ -47,17 +50,6 @@ public class VoxelMesh : IVoxelMesh
         MeshAllocator.AddVertices(vertices);
         MeshAllocator.AddNormals(normals);
         MeshAllocator.AddTriangles(triangles);
-    }
-
-    public void Update(float deltaTime)
-    {
-        if(_currentDelay > 0.0f)
-        {
-            _currentDelay -= deltaTime;
-
-            if (_currentDelay <= 0.0f)
-                RebuildForced();
-        }
     }
 
     public void SetVoxelBody(IVoxelData body)
@@ -72,6 +64,13 @@ public class VoxelMesh : IVoxelMesh
         _sizeFactor = size;
         _isDirty = true;
         Changed?.Invoke();
+    }
+
+    public void SetRebuildDelay(float delay) => _rebuildDelay = delay;
+
+    public void Update(float deltaTime)
+    {
+        //TO-DO
     }
 
     public void RebuildForced()
@@ -118,6 +117,8 @@ public class VoxelMesh : IVoxelMesh
         _mesh.vertices = MeshAllocator.CloneVertices();
         _mesh.normals = MeshAllocator.CloneNormals();
         _mesh.triangles = MeshAllocator.CloneTriangles();
+        _mesh.Optimize();
+
         _isDirty = false;
 
         Rebuilt?.Invoke();

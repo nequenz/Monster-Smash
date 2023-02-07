@@ -13,7 +13,9 @@ public interface IVoxelData
     public Vector3 Size { get; }
 
 
-    public void Allocate(Vector3Int size);
+    public void Allocate();
+
+    public void Allocate(Vector3Int size, int setValue);
 
     public void SetVoxel(Vector3Int position, int value);
 
