@@ -3,7 +3,7 @@ using System;
 
 public class VoxelCollider : IVoxelCollider
 {
-    private Transform _transform;
+    [SerializeReference] private Transform _transform;
     private IVoxelData _data;
     private IVoxelMesh _mesh;
 
@@ -21,6 +21,12 @@ public class VoxelCollider : IVoxelCollider
 
     public Vector3Int CalculateVoxelPosition(Vector3 position)
     {
+        Vector3 offsetPosition = _transform.position
+            - (_data.Size / 2) * _mesh.SizeFactor
+            + (Vector3.one * _mesh.SizeFactor / 2);
+
+        //Debug.Log(position);
+        Debug.DrawLine(offsetPosition, position, Color.black, 0.1f);
         return default;
     }
 
