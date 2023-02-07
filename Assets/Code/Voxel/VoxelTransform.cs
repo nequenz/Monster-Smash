@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-public class VoxelCollider : IVoxelCollider
+public class VoxelTransform : IVoxelTransform
 {
     [SerializeReference] private Transform _transform;
     private IVoxelData _data;
@@ -44,6 +44,5 @@ public class VoxelCollider : IVoxelCollider
         //Debug.DrawLine(offsetPosition, offsetPosition + localPosition, Color.black, 0.1f);
         return scaledLocalPosition;
     }
-
 
 }

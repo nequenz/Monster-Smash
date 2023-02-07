@@ -2,7 +2,7 @@
 using System;
 
 
-public interface IVoxelCollider
+public interface IVoxelTransform
 {
     public Transform AttachedTransform { get; }
     public IVoxelData VoxelData { get; }

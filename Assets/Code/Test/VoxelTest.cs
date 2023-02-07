@@ -6,7 +6,7 @@ public class VoxelTest : MonoBehaviour
     [SerializeReference] private Transform _testObj;
     [SerializeReference] private IVoxelMesh _voxelMesh = new VoxelMesh();
     [SerializeReference] private IVoxelData _voxels = new VoxelData();
-    [SerializeReference] private IVoxelCollider _voxelCollider = new VoxelCollider();
+    [SerializeReference] private IVoxelTransform _voxelCollider = new VoxelTransform();
     private MeshFilter _filter;
     private Collider _collider;
 

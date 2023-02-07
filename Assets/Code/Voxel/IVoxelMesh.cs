@@ -4,7 +4,6 @@ using System;
 
 public interface IVoxelMesh
 {
-    public event Action Changed;
     public event Action Rebuilt;
 
 

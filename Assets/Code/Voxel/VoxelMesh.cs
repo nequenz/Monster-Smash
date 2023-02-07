@@ -12,7 +12,6 @@ public class VoxelMesh : IVoxelMesh
     private bool _isDirty = false;
 
 
-    public event Action Changed;
     public event Action Rebuilt;
 
 
@@ -56,14 +55,12 @@ public class VoxelMesh : IVoxelMesh
     {
         _body = body;
         _isDirty = true;
-        Changed?.Invoke();
     }
 
     public void SetSize(float size)
     {
         _sizeFactor = size;
         _isDirty = true;
-        Changed?.Invoke();
     }
 
     public void SetRebuildDelay(float delay) => _rebuildDelay = delay;
