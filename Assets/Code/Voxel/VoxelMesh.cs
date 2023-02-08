@@ -7,6 +7,7 @@ public class VoxelMesh : IVoxelMesh
     [SerializeReference] private float _sizeFactor = 1f;
     private Mesh _mesh;
     private IVoxelData _body;
+    private IVoxelPalette _palette = new VoxelPaletteDefault();
     private float _rebuildDelay = 0.25f;
     private float _currentDelay = 0.0f;
     private bool _isDirty = false;
@@ -16,13 +17,14 @@ public class VoxelMesh : IVoxelMesh
 
 
     public IVoxelData AttachedVoxelBody => _body;
+    public IVoxelPalette Palette => _palette;
     public Mesh BuiltMesh => _mesh;
     public float SizeFactor => _sizeFactor;
     public bool IsDirty => _isDirty;
     public float RebuildDelay => _rebuildDelay;
 
 
-    private void AddPlane(Vector3 position, Quaternion rotation)
+    private void AddPlane(Vector3 position, Quaternion rotation, Color color)
     {
         float _sideCenter = -_sizeFactor / 2;
         Vector3 offset = new Vector3(_sideCenter, -_sideCenter, _sideCenter);
@@ -49,6 +51,7 @@ public class VoxelMesh : IVoxelMesh
         MeshAllocator.AddVertices(vertices);
         MeshAllocator.AddNormals(normals);
         MeshAllocator.AddTriangles(triangles);
+        MeshAllocator.AddColors(color, VoxelMeshInfo.SideVertexCount);
     }
 
     public void SetVoxelBody(IVoxelData body)
@@ -73,6 +76,7 @@ public class VoxelMesh : IVoxelMesh
     public void RebuildForced()
     {
         Vector3Int currentPosition = Vector3Int.zero;
+        int voxelValue;
 
         if (_mesh is null)
             _mesh = new();
@@ -87,26 +91,27 @@ public class VoxelMesh : IVoxelMesh
                 for (int y = 0; y < _body.Size.y; y++)
                 {
                     currentPosition.Set(x, y, z);
+                    voxelValue = _body.GetVoxel(currentPosition);
 
-                    if(_body.GetVoxel(currentPosition) != IVoxelData.EmptyVoxel)
+                    if (voxelValue != IVoxelData.EmptyVoxel)
                     {
                         if (_body.GetVoxel(x, y + 1, z) == IVoxelData.EmptyVoxel)
-                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.TopSide);
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.TopSide, _palette.GetColor(voxelValue));
 
                         if (_body.GetVoxel(x, y - 1, z) == IVoxelData.EmptyVoxel)
-                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.BottomSide);
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.BottomSide, _palette.GetColor(voxelValue));
 
                         if (_body.GetVoxel(x + 1, y, z) == IVoxelData.EmptyVoxel)
-                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.RightSide);
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.RightSide, _palette.GetColor(voxelValue));
 
                         if (_body.GetVoxel(x - 1, y, z) == IVoxelData.EmptyVoxel)
-                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.LeftSide);
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.LeftSide, _palette.GetColor(voxelValue));
 
                         if (_body.GetVoxel(x, y, z - 1) == IVoxelData.EmptyVoxel)
-                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.FrontSide);
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.FrontSide, _palette.GetColor(voxelValue));
 
                         if (_body.GetVoxel(x, y, z + 1) == IVoxelData.EmptyVoxel)
-                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.BackSide);
+                            AddPlane(new Vector3Int(x, y, z), VoxelMeshInfo.BackSide, _palette.GetColor(voxelValue));
                     }
                 }
             }
@@ -115,6 +120,7 @@ public class VoxelMesh : IVoxelMesh
         _mesh.vertices = MeshAllocator.CloneVertices();
         _mesh.normals = MeshAllocator.CloneNormals();
         _mesh.triangles = MeshAllocator.CloneTriangles();
+        _mesh.colors = MeshAllocator.CloneColors();
         _mesh.Optimize();
 
         _isDirty = false;

@@ -8,6 +8,7 @@ public interface IVoxelMesh
 
 
     public IVoxelData AttachedVoxelBody { get; }
+    public IVoxelPalette Palette { get; }
     public Mesh BuiltMesh { get; }
     public float SizeFactor { get; }
     public bool IsDirty { get; }
