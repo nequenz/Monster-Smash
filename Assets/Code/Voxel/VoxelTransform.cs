@@ -33,8 +33,8 @@ public class VoxelTransform : IVoxelTransform
         */
         Vector3 localPosition = Quaternion.Inverse(_transform.rotation)
             * (position - offsetPosition)
-            + (_data.Size / 2) * _mesh.SizeFactor
-            - (Vector3.one * _mesh.SizeFactor / 2);
+            + (_data.Size / 2) * _mesh.SizeFactor;
+           // - (Vector3.one * _mesh.SizeFactor / 4);
 
         scaledLocalPosition.x = (int)(localPosition.x / _mesh.SizeFactor);
         scaledLocalPosition.y = (int)(localPosition.y / _mesh.SizeFactor);

@@ -26,7 +26,7 @@ public class VoxelMesh : IVoxelMesh
     {
         float _sideCenter = -_sizeFactor / 2;
         Vector3 offset = new Vector3(_sideCenter, -_sideCenter, _sideCenter);
-        Vector3 validSize = new Vector3(_body.Size.x, -_body.Size.y, _body.Size.z);
+        Vector3 validSize = new Vector3(_body.Size.x, _body.Size.y - 2, _body.Size.z);
         Vector3[] vertices = new Vector3[VoxelMeshInfo.SideVertexCount];
         Vector3[] normals = new Vector3[VoxelMeshInfo.SideVertexCount];
         int[] triangles = new int[VoxelMeshInfo.SideTriangleCount];
