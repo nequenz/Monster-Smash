@@ -8,5 +8,10 @@ public class GameCamera : MonoBehaviour
     private Coroutine _action;
 
 
+    private void Awake()
+    {
+        _animator.AttachTransform(transform);
 
+        _action = StartCoroutine(_animator.ShowEnemy());
+    }
 }
