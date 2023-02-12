@@ -19,6 +19,9 @@ public static class MeshAllocator
 
     public static void Clear()
     {
+        /*
+         * TO-DO:REALIZE AN ELEMENT POOL INSTEAD CLEAR
+        */
         _verticies.Clear();
         _normals.Clear();
         _uvs.Clear();
