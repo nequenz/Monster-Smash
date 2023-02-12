@@ -1,17 +1,23 @@
-using System.Collections;
 using UnityEngine;
 
+
+[RequireComponent(typeof(Camera))]
 public class GameCamera : MonoBehaviour
 {
-    [SerializeField] private Transform _targetToLook;
-    private CameraAnimator _animator = new CameraAnimator();
-    private Coroutine _action;
+    [SerializeReference] CameraRaycast _raycast = new CameraRaycast();
+    private Camera _camera;
+
+
+    public Camera AttachedCamera => _camera;
 
 
     private void Awake()
     {
-        _animator.AttachTransform(transform);
+        _camera = GetComponent<Camera>();
+    }
 
-        _action = StartCoroutine(_animator.ShowEnemy());
+    private void Update()
+    {
+        
     }
 }
