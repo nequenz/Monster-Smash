@@ -6,6 +6,7 @@ public class VoxelMesh : IVoxelMesh
 {
     [SerializeField] private float _sizeFactor = 1f;
     [SerializeField] private float _rebuildDelay = 0.55f;
+    [SerializeField] private MeshFilter _filter;
     private IVolumeReadOnly<Color> _colors;
     private IVoxelVolume _voxels;
     private Mesh _mesh;
@@ -19,7 +20,7 @@ public class VoxelMesh : IVoxelMesh
     public IVoxelVolume AttachedVoxelVolume => _voxels;
     public IVolumeReadOnly<Color> AttachedColorVolume => _colors;
     public Mesh BuiltMesh => _mesh;
-    public float SizeFactor => _sizeFactor;
+    public float FaceSize => _sizeFactor;
     public bool IsDirty => _isDirty;
     public float RebuildDelay => _rebuildDelay;
 
@@ -61,6 +62,17 @@ public class VoxelMesh : IVoxelMesh
         MeshAllocator.AddColors(color, VoxelMeshInfo.SideVertexCount);
     }
 
+    public IVoxelMesh Init(IVoxelVolume voxels, IVolumeReadOnly<Color> colors, MeshFilter filter, float delay, float size)
+    {
+        SetVoxelVolume(voxels);
+        SetColorVolume(colors);
+        //SetMeshFilter(filter);
+        //SetRebuildDelay(delay);
+        //SetSize(size);
+
+        return this;
+    }
+
     public void SetVoxelVolume(IVoxelVolume voxels)
     {
         if (voxels is null)
@@ -77,6 +89,11 @@ public class VoxelMesh : IVoxelMesh
         _isDirty = true;
     }
 
+    public void SetMeshFilter(MeshFilter filter)
+    {
+        _filter = filter;
+    }
+
     public void SetRebuildDelay(float delay) => _rebuildDelay = delay;
 
     public void SetSize(float size)
@@ -90,7 +107,7 @@ public class VoxelMesh : IVoxelMesh
         Vector3Int currentPosition = Vector3Int.zero;
         bool voxelValue;
 
-        if (_colors is null || _voxels is null)
+        if (_colors is null || _voxels is null || _filter is null)
             return;
 
         if (_mesh is null)
@@ -138,6 +155,7 @@ public class VoxelMesh : IVoxelMesh
         _mesh.colors = MeshAllocator.CloneColors();
         _mesh.Optimize();
 
+        _filter.mesh = _mesh;
         _isDirty = false;
 
         Rebuilt?.Invoke();
@@ -153,4 +171,5 @@ public class VoxelMesh : IVoxelMesh
                 RebuildForced();
         }
     }
+
 }

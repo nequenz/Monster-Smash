@@ -24,7 +24,7 @@ public class VoxelBody : MonoBehaviour
         _mesh.RebuildForced();
         _mesh.Rebuilt += OnMeshRebuild;
 
-        _collider.transform.localScale = _voxels.Size * _mesh.SizeFactor;
+        _collider.transform.localScale = _voxels.Size * _mesh.FaceSize;
         _meshFilter.mesh = _mesh.BuiltMesh;
     }
 

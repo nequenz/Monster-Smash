@@ -30,6 +30,14 @@ public class VoxelVolume : IVoxelVolume
         return zeroCheck && sizeCheck;
     }
 
+    public IVoxelVolume Init(IVolumeReadOnly<Color> colorPrefab, bool canBeReallocated)
+    {
+        SetVolumePrefabToBuild(colorPrefab);
+        //_canBeReallocated = canBeReallocated;
+
+        return this;
+    }
+
     public void Allocate()
     {
         Vector3Int size = default;

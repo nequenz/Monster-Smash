@@ -13,6 +13,8 @@ public interface IVoxelVolume : IVolume<bool>
     public IVolumeReadOnly<Color> PrefabToBuild { get; }
 
 
+    public IVoxelVolume Init(IVolumeReadOnly<Color> prefabToBuild, bool canBeReallocated);
+
     public void SetVolumePrefabToBuild(IVolumeReadOnly<Color> prefabToBuild);
 
     public void Rebuild();
