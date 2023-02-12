@@ -6,8 +6,6 @@ using System;
 [RequireComponent(typeof(Collider))]
 public class BodyPart : MonoBehaviour
 {
-    [SerializeReference] private IVoxelData _voxelBody = new VoxelData();
-    [SerializeReference] private IVoxelBodyDestroyPolicy _voxelPolicy = new VoxelBodyDestroyPolicy();
     [SerializeField] private BodyPart _parent;
     [SerializeField] private bool _isRootMain = false;
     private Rigidbody _rigid;
@@ -26,16 +24,6 @@ public class BodyPart : MonoBehaviour
 
         if (_parent is not null)
             _parent.Detached += OnParentDetach;
-    }
-
-    private void OnEnable()
-    {
-
-    }
-
-    private void OnDisable()
-    {
-
     }
 
     private void OnCollisionEnter(Collision otherCollision)
