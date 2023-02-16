@@ -4,24 +4,25 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class GameCamera : MonoBehaviour
 {
-    [SerializeReference] CameraRaycast _cameraRayCast = new();
-    [SerializeReference] CameraInput _cameraInput = new();
+    [SerializeReference] CameraRaycast _raycast = new();
+    [SerializeReference] CameraInput _input = new();
     private Camera _camera;
 
 
     public Camera AttachedCamera => _camera;
-    public CameraRaycast CameraRaycast => _cameraRayCast;
-    public CameraInput Input => _cameraInput;
+    public Transform Transform => _camera.transform;
 
 
     private void Awake()
     {
         _camera = GetComponent<Camera>();
-        _cameraRayCast.Init();
+
+        _raycast.Init(this);
+        _input.Init(this);
     }
 
     private void Update()
     {
-        
+        _input.Update(Time.deltaTime);
     }
 }

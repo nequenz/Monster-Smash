@@ -10,6 +10,10 @@ public class TestVolume : MonoBehaviour
     private IVolumeReadOnly<Color> _blueCube;
 
 
+    public IVoxelVolume AttachedVoxelVolume => _voxels;
+    public IVoxelTransform AttachedVoxelTransform => _transform;
+
+
     private void Awake()
     {
         ColorVolume colors = new ColorVolume();
@@ -19,10 +23,14 @@ public class TestVolume : MonoBehaviour
         colors.SetValue(new Vector3Int(2, 7, 0), Color.yellow);
         _blueCube = new VolumeReadOnly<Color>(colors);
 
-        _voxels.Init(_blueCube, false).Allocate();
-        _voxels.Rebuild();
-        _mesh.Init(_voxels, _blueCube, null, 0.55f, 0.25f).RebuildForced();
-        _transform.Init(null, _voxels, _mesh, null);
+        _voxels.SetVolumePrefabToBuild(_blueCube);
+        _mesh.SetVoxelVolume(_voxels);
+        _mesh.SetColorVolume(_blueCube);
+        _transform.SetVolume(_voxels);
+        _transform.SetVolumeMesh(_mesh);
+        _voxels.Allocate();
+        _voxels.MatchToPrefab();
+        _mesh.RebuildForced();
     }
 
     private void OnTriggerStay(Collider other)
@@ -33,6 +41,17 @@ public class TestVolume : MonoBehaviour
     private void Update()
     {
         _mesh.Update(Time.deltaTime);
+        transform.rotation *= Quaternion.AngleAxis(Time.deltaTime * 20, Vector3.one);
+    }
+
+    public void SetVoxel(Vector3 position, bool typeVoxel)
+    {
+        _voxels.SetValue(_transform.CalculateVoxelPosition(position), typeVoxel);
+    }
+
+    public bool GetVoxel(Vector3 position)
+    {
+        return _voxels.GetValue(_transform.CalculateVoxelPosition(position));
     }
 
 

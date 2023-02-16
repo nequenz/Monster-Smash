@@ -67,9 +67,9 @@ public class VoxelMesh : IVoxelMesh
     {
         SetVoxelVolume(voxels);
         SetColorVolume(colors);
-        //SetMeshFilter(filter);
-        //SetRebuildDelay(delay);
-        //SetSize(size);
+        SetMeshFilter(filter);
+        SetRebuildDelay(delay);
+        SetSize(size);
 
         return this;
     }

@@ -17,5 +17,5 @@ public interface IVoxelVolume : IVolume<bool>
 
     public void SetVolumePrefabToBuild(IVolumeReadOnly<Color> prefabToBuild);
 
-    public void Rebuild();
+    public void MatchToPrefab();
 }

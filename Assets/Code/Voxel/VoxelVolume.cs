@@ -33,7 +33,7 @@ public class VoxelVolume : IVoxelVolume
     public IVoxelVolume Init(IVolumeReadOnly<Color> colorPrefab, bool canBeReallocated)
     {
         SetVolumePrefabToBuild(colorPrefab);
-        //_canBeReallocated = canBeReallocated;
+        _canBeReallocated = canBeReallocated;
 
         return this;
     }
@@ -72,7 +72,7 @@ public class VoxelVolume : IVoxelVolume
         }
     }
 
-    public void Rebuild()
+    public void MatchToPrefab()
     {
         if (_prefabToBuild is null)
             return;

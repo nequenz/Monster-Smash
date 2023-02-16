@@ -11,22 +11,26 @@ public class VoxelTransform : IVoxelTransform
 
 
     public Transform AttachedTransform => _transform;
+    public BoxCollider AttachedBoxCollider => _collider;
     public IVoxelVolume AttachedVoxelVolume => _voxels;
     public IVoxelMesh AttachedVoxelMesh => _mesh;
-    public BoxCollider AttachedBoxCollider => _collider;
-
+    
 
     private void OnMeshRebuild()
     {
+        MeshFilter meshFilter = _collider.transform.GetComponentInChildren<MeshFilter>();
+        
+        _collider.transform.DetachChildren();
         _collider.transform.localScale = _voxels.Size * _mesh.FaceSize;
+        meshFilter.transform.SetParent(_collider.transform);
     }
 
     public IVoxelTransform Init(Transform transform, IVoxelVolume volume, IVoxelMesh mesh, BoxCollider collider)
     {
-        //SetTransform(transform);
+        SetTransform(transform);
         SetVolume(volume);
         SetVolumeMesh(mesh);
-        //SetBoxCollider(collider);
+        SetBoxCollider(collider);
 
         return this;
     }

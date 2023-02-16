@@ -6,13 +6,14 @@ using UnityEngine;
 public class CameraRaycast
 {
     [SerializeField] private RectTransform _mainUI;
-    [SerializeField] private GameCamera _camera;
     [SerializeField] private Vector3 _screenPosition;
     [SerializeField] private bool _isAutoScreenCenter = true;
+    private GameCamera _camera;
 
-
-    public void Init()
+    public void Init(GameCamera camera)
     {
+        _camera = camera;
+
         if (_isAutoScreenCenter && _mainUI is not null)
             _screenPosition = new Vector3( _mainUI.rect.width / 5, _mainUI.rect.height / 5 );
     }
