@@ -6,10 +6,10 @@ public interface IVoxelTransform
     public Transform AttachedTransform { get; }
     public IVoxelVolume AttachedVoxelVolume { get; }
     public IVoxelMesh AttachedVoxelMesh { get; }
-    public BoxCollider AttachedBoxCollider { get; }
+    public MeshCollider AttachedMeshCollider { get; }
 
 
-    public IVoxelTransform Init(Transform transform, IVoxelVolume volume, IVoxelMesh mesh, BoxCollider collider);
+    public IVoxelTransform Init(Transform transform, IVoxelVolume volume, IVoxelMesh mesh, MeshCollider collider);
 
     public void SetTransform(Transform transform);
 
@@ -17,7 +17,7 @@ public interface IVoxelTransform
 
     public void SetVolumeMesh(IVoxelMesh mesh);
 
-    public void SetBoxCollider(BoxCollider collider);
+    public void SetMeshCollider(MeshCollider collider);
 
     public Vector3Int CalculateVoxelPosition(Vector3 position);
 }

@@ -10,7 +10,7 @@ public class VoxelVolume : IVoxelVolume
     private Vector3Int _size;
     private BitArray[,] _bits;
     private IVolumeReadOnly<Color> _prefabToBuild;
-
+    private bool _isChangeEventEnabled = true;
 
     public event Action<Vector3Int> Changed;
     public event Action Rebuilt;
@@ -77,6 +77,8 @@ public class VoxelVolume : IVoxelVolume
         if (_prefabToBuild is null)
             return;
 
+        _isChangeEventEnabled = false;
+
         for(int x = 0; x < _size.x; x ++)
         {
             for (int z = 0; z < _size.z; z++)
@@ -89,16 +91,26 @@ public class VoxelVolume : IVoxelVolume
             }
         }
 
+        _isChangeEventEnabled = true;
+
         Rebuilt?.Invoke();
     }
 
     public void SetValue(Vector3Int position, bool value)
     {
+        bool prevValue;
+
         if (IsAccessValid(position))
         {
-            _bits[position.x, position.z].Set(position.y, value);
+            prevValue = _bits[position.x, position.z].Get(position.y);
 
-            Changed?.Invoke(position);
+            if(prevValue != value)
+            {
+                _bits[position.x, position.z].Set(position.y, value);
+
+                if(_isChangeEventEnabled)
+                    Changed?.Invoke(position);
+            }
         }
     }
 

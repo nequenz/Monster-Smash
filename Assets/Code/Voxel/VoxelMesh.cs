@@ -28,7 +28,8 @@ public class VoxelMesh : IVoxelMesh
 
     private void OnVoxelsChanged(Vector3Int position)
     {
-        _currentDelay = Mathf.Clamp(_rebuildDelay, 0, _rebuildDelay);
+        //_currentDelay = Mathf.Clamp(_rebuildDelay, 0, _rebuildDelay);
+        RebuildForced();
     }
 
     private void AddFace(Vector3 position, Quaternion rotation, Color color)

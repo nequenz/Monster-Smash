@@ -5,32 +5,33 @@ using System;
 public class VoxelTransform : IVoxelTransform
 {
     [SerializeReference] private Transform _transform;
-    [SerializeReference] private BoxCollider _collider;
+    [SerializeReference] private MeshCollider _collider;
     private IVoxelVolume _voxels;
     private IVoxelMesh _mesh;
 
 
     public Transform AttachedTransform => _transform;
-    public BoxCollider AttachedBoxCollider => _collider;
+    public MeshCollider AttachedMeshCollider => _collider;
     public IVoxelVolume AttachedVoxelVolume => _voxels;
     public IVoxelMesh AttachedVoxelMesh => _mesh;
     
 
     private void OnMeshRebuild()
     {
-        MeshFilter meshFilter = _collider.transform.GetComponentInChildren<MeshFilter>();
-        
-        _collider.transform.DetachChildren();
-        _collider.transform.localScale = _voxels.Size * _mesh.FaceSize;
-        meshFilter.transform.SetParent(_collider.transform);
+        //MeshFilter meshFilter = _collider.transform.GetComponentInChildren<MeshFilter>();
+
+        // _collider.transform.DetachChildren();
+        //_collider.transform.localScale = _voxels.Size * _mesh.FaceSize;
+        // meshFilter.transform.SetParent(_collider.transform);
+        _collider.sharedMesh = _mesh.BuiltMesh;
     }
 
-    public IVoxelTransform Init(Transform transform, IVoxelVolume volume, IVoxelMesh mesh, BoxCollider collider)
+    public IVoxelTransform Init(Transform transform, IVoxelVolume volume, IVoxelMesh mesh, MeshCollider collider)
     {
         SetTransform(transform);
         SetVolume(volume);
         SetVolumeMesh(mesh);
-        SetBoxCollider(collider);
+        SetMeshCollider(collider);
 
         return this;
     }
@@ -42,10 +43,11 @@ public class VoxelTransform : IVoxelTransform
     public void SetVolumeMesh(IVoxelMesh mesh)
     {
         _mesh = mesh;
+        _collider.sharedMesh = _mesh.BuiltMesh;
         mesh.Rebuilt += OnMeshRebuild;
     }
 
-    public void SetBoxCollider(BoxCollider collider) => _collider = collider;
+    public void SetMeshCollider(MeshCollider collider) => _collider = collider;
 
     public Vector3Int CalculateVoxelPosition(Vector3 position)
     {
