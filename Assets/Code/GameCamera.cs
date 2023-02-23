@@ -4,8 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class GameCamera : MonoBehaviour
 {
-    [Header("UI Dependencies")]
-    [SerializeField] private RectTransform _mainUI;
+    [Header("Aim params")]
     [SerializeField] private Vector3 _screenPosition;
     [SerializeField] private bool _isAutoScreenCenter = true;
     [Header("First person parameters")]
@@ -23,8 +22,8 @@ public class GameCamera : MonoBehaviour
     {
         _unityCamera = GetComponent<Camera>();
 
-        if (_isAutoScreenCenter && _mainUI is not null)
-            _screenPosition = new Vector3(_mainUI.rect.width / 2, _mainUI.rect.height / 2);
+        if (_isAutoScreenCenter)
+            _screenPosition = new Vector3(Screen.width / 2, Screen.height / 2);
 
         if (_objectToAttach is not null)
         {
