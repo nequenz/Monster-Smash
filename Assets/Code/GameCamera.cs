@@ -6,10 +6,12 @@ public class GameCamera : MonoBehaviour
 {
     [Header("Aim params")]
     [SerializeField] private Vector3 _screenPosition;
+    [SerializeField] private float _aimDistance = 50f;
     [SerializeField] private bool _isAutoScreenCenter = true;
     [Header("First person parameters")]
     [SerializeField] private Vector2 _axiesFactor = new Vector2(2.35f, 1.15f);
     [SerializeField] private Transform _objectToAttach;
+    [SerializeField] private Vector3 _offset = default;
     private Camera _unityCamera;
     private Vector2 _angles;
 
@@ -28,7 +30,7 @@ public class GameCamera : MonoBehaviour
         if (_objectToAttach is not null)
         {
             transform.parent = _objectToAttach;
-            transform.localPosition = Vector3.zero;
+            transform.localPosition = _offset;
         }
     }
 
@@ -44,5 +46,7 @@ public class GameCamera : MonoBehaviour
     public Vector3 CalculatePositionByDistance(float distance) => Raycast().GetPoint(distance);
 
     public Ray Raycast() => _unityCamera.ScreenPointToRay(_screenPosition);
+
+    public Vector3 GetAimPosition() => CalculatePositionByDistance(_aimDistance);
 
 }

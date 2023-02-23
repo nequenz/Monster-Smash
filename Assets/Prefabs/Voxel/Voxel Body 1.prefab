@@ -103,7 +103,7 @@ MonoBehaviour:
       type: {class: VoxelTransform, ns: , asm: Assembly-CSharp}
       data:
         _transform: {fileID: 5380124924977470746}
-        _collider: {fileID: 0}
+        _collider: {fileID: 5035381317306782005}
     - rid: 3949732132687183875
       type: {class: VoxelVolume, ns: , asm: Assembly-CSharp}
       data:
