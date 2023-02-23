@@ -9,6 +9,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float _shootDelay = 0.5f;
     [SerializeField] private float _reloadDelay = 3.0f;
     private int _currentAmmoClip = 0;
+    private bool _isReloading = false;
+    private bool _isAfterShoot = false;
 
 
     [SerializeField] protected Projectile MainProjectilePrefab;
@@ -24,6 +26,8 @@ public class Weapon : MonoBehaviour
     public int AmmoCount => _ammoCount;
     public int AmmoClipSize => _ammoClipSize;
     public int CurrentAmmoClip => _currentAmmoClip;
+    public bool IsReloading => _isReloading;
+    public bool IsAfterShoot => _isAfterShoot;
 
 
     private void Awake()
@@ -40,16 +44,13 @@ public class Weapon : MonoBehaviour
 
     }
 
-    protected virtual void OnReload() 
-    {
-
-    }
+    protected virtual void OnReload() { }
 
     protected virtual void OnAmmoZeroReach() { }
 
     protected virtual void OnAmmoClipZeroReached() { }
 
-    protected Projectile CreateBullet(Vector3 position)
+    protected virtual Projectile CreateBullet(Vector3 position)
     {
         return Instantiate(MainProjectilePrefab, position, Quaternion.identity);
     }
@@ -110,10 +111,12 @@ public class Weapon : MonoBehaviour
     public void Shoot()
     {
         OnShoot();
+        Shooted?.Invoke();
     }
 
     public void Reload()
     {
         OnReload();
+        Reloaded?.Invoke();
     }
 }
