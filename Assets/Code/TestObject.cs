@@ -16,31 +16,28 @@ public class TestObject : MonoBehaviour
         _voxelBody.Init();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnEnable()
     {
-        Rigidbody body;
+        _voxelBody.AttachedVolume.Changed += OnVoxelBodyChanged;
+    }
 
-        if(collision.collider.Is<Projectile>())
-        {
-            //VoxelParticle part = Instantiate(_voxelParticlePrefab, collision.collider.transform.position, Quaternion.identity);
-            
-            _voxelBody.SetVoxel(collision.collider.transform.position, IVoxelVolume.Empty);
-
-            //_voxelBody.CalibrateParticle(part, collision.collider.transform.position);
-
-            if(AttachedVoxelBody.GetVoxel(collision.collider.transform.position) == IVoxelVolume.Empty)
-            {
-                body = collision.collider.GetComponent<Rigidbody>();
-                Vector3 deepPosition = transform.position + body.velocity * _voxelBody.AttachedVoxelMesh.FaceSize * 2;
-
-                _voxelBody.SetVoxel(deepPosition, IVoxelVolume.Empty);
-            }
-        }
+    private void OnDisable()
+    {
+        _voxelBody.AttachedVolume.Changed -= OnVoxelBodyChanged;
     }
 
     private void Update()
     {
         _voxelBody.Update(Time.deltaTime);
+        transform.rotation *= Quaternion.AngleAxis(Time.deltaTime * 25, Vector3.one);
+    }
+
+    private void OnVoxelBodyChanged(Vector3Int position)
+    {
+        Vector3 worldPosition = _voxelBody.AttachedTransform.CalculateWorldPosition(position);
+
+        VoxelParticle particle = Instantiate(_voxelParticlePrefab, worldPosition, Quaternion.identity);
+        particle.SetParams(_voxelBody.AttachedVoxelMesh.FaceSize, Color.white, _voxelBody.AttachedTransform.AttachedTransform.position);
     }
 
 

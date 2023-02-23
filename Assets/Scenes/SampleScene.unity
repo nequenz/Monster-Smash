@@ -1282,6 +1282,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SkeletonZombie
       objectReference: {fileID: 0}
+    - target: {fileID: 100056, guid: 6c0c57d18de9ca54aba0bf5b8ae4abbc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400056, guid: 6c0c57d18de9ca54aba0bf5b8ae4abbc, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1374,7 +1378,7 @@ GameObject:
   - component: {fileID: 4346702769882915614}
   - component: {fileID: 4346702769882915613}
   - component: {fileID: 4346702769882915612}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1458,7 +1462,7 @@ GameObject:
   - component: {fileID: 4346702770654422596}
   - component: {fileID: 4346702770654422598}
   - component: {fileID: 4346702770654422597}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Voxel Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1528,7 +1532,7 @@ MonoBehaviour:
     - rid: 3949732132687183886
       type: {class: VoxelMesh, ns: , asm: Assembly-CSharp}
       data:
-        _sizeFactor: 0.1
+        _sizeFactor: 0.25
         _rebuildDelay: 0.55
         _filter: {fileID: 4346702769882915613}
     - rid: 3949732132687183887
@@ -1551,6 +1555,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}

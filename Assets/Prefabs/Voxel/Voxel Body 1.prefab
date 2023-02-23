@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5380124924977470746}
-  - component: {fileID: 5380124924977470749}
   - component: {fileID: 5380124924977470819}
+  - component: {fileID: 5035381317306782005}
   - component: {fileID: 5380124924977470818}
   m_Layer: 0
   m_Name: Voxel Body 1
@@ -35,19 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5380124924977470749
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5380124924977470750}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5380124924977470819
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -64,6 +51,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!64 &5035381317306782005
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5380124924977470750}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!114 &5380124924977470818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,7 +103,7 @@ MonoBehaviour:
       type: {class: VoxelTransform, ns: , asm: Assembly-CSharp}
       data:
         _transform: {fileID: 5380124924977470746}
-        _collider: {fileID: 5380124924977470749}
+        _collider: {fileID: 0}
     - rid: 3949732132687183875
       type: {class: VoxelVolume, ns: , asm: Assembly-CSharp}
       data:

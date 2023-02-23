@@ -6,7 +6,7 @@ public class Weapon
 {
     private Transform _shotPoint;
     private Projectile _projectile;
-    private float _shootDelayMax = 2.0f;
+    private float _shootDelayMax = 1.0f;
     private float _shootDelay = 0.0f;
     private int _ammoMax = 9999;
     private int _ammoCurrent = 0;

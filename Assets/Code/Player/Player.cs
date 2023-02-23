@@ -45,7 +45,7 @@ public sealed class Player : MonoBehaviour
 
     private void AttachInputs()
     {
-        const float ForceShot = 250f;
+        const float ForceShot = 300f;
 
         _input.AttachAction(-1, () => _move.Move(_move.AttachedTransform.forward), KeyMode.Hold, KeyCode.W);
         _input.AttachAction(-1, () => _move.Move(_move.AttachedTransform.forward * -1), KeyMode.Hold, KeyCode.S);

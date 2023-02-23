@@ -15,7 +15,7 @@ public class WeaponBuilder
     {
         Weapon weapon = new();
 
-        weapon.Init(_shotPoint, _selectedProjectile,0.25f, 100);
+        weapon.Init(_shotPoint, _selectedProjectile,0.1f, 100);
 
         return weapon;
     }

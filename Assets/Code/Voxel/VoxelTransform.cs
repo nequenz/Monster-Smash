@@ -53,26 +53,28 @@ public class VoxelTransform : IVoxelTransform
     {
         Vector3Int scaledLocalPosition = default;
         Vector3 offsetPosition = _transform.position;
-        /*
-        Vector3Int scaledLocalPosition = default;
-        Vector3 offsetPosition = _transform.position
-            - (_data.Size / 2) * _mesh.SizeFactor
-            + (Vector3.one * _mesh.SizeFactor / 2);
-
-        Vector3 localPosition = (position - offsetPosition);
-        */
         Vector3 localPosition = Quaternion.Inverse(_transform.rotation)
             * (position - offsetPosition)
             + (_voxels.Size / 2) * _mesh.FaceSize;
-           // - (Vector3.one * _mesh.SizeFactor / 4);
 
         scaledLocalPosition.x = (int)(localPosition.x / _mesh.FaceSize);
         scaledLocalPosition.y = (int)(localPosition.y / _mesh.FaceSize);
         scaledLocalPosition.z = (int)(localPosition.z / _mesh.FaceSize);
 
-        //Debug.Log(scaledLocalPosition);
-        //Debug.DrawLine(offsetPosition, offsetPosition + localPosition, Color.black, 0.1f);
         return scaledLocalPosition;
+    }
+
+    public Vector3 CalculateWorldPosition(Vector3Int position)
+    {
+        Vector3 worldPosition = default;
+
+        worldPosition.x = position.x * _mesh.FaceSize;
+        worldPosition.y = position.y * _mesh.FaceSize;
+        worldPosition.z = position.z * _mesh.FaceSize;
+        worldPosition -= ((_voxels.Size / 2) * _mesh.FaceSize) - new Vector3(_mesh.FaceSize / 2, _mesh.FaceSize / 2, _mesh.FaceSize / 2);
+        worldPosition = _transform.rotation * worldPosition + _transform.position;
+
+        return worldPosition;
     }
 
 }

@@ -20,4 +20,6 @@ public interface IVoxelTransform
     public void SetMeshCollider(MeshCollider collider);
 
     public Vector3Int CalculateVoxelPosition(Vector3 position);
+
+    public Vector3 CalculateWorldPosition(Vector3Int position);
 }

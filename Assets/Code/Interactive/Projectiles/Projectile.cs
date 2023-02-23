@@ -7,8 +7,9 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float _livingTimeMax = 5.0f;
     private Rigidbody _body;
     private Collider _collider;
-    private Vector3 _nextPosition;
+    private Vector3 _prevVelocity;
     private float _livingTime = 0.0f;
+
 
     public void Awake()
     {
@@ -27,39 +28,10 @@ public class Projectile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _nextPosition = _body.position + _body.velocity;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        TestObject body;
-
-        if (collision.collider.Is<TestObject>())
+        if(Physics.Raycast(transform.position, _body.velocity, out RaycastHit hit, 2f))
         {
-            body = collision.collider.GetComponent<TestObject>();
-
-            if(body.AttachedVoxelBody.GetVoxel(transform.position) == IVoxelVolume.Empty)
-            {
-                
-                //Physics.IgnoreCollision(_collider, collision.collider);
-                //Debug.Log("!");
-            }
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        TestObject body;
-
-        if (other.Is<TestObject>())
-        {
-            body = other.GetComponent<TestObject>();
-
-            if (body.AttachedVoxelBody.GetVoxel(transform.position) == IVoxelVolume.Empty)
-            {
-                //Physics.IgnoreCollision(_collider, collision.collider);
-                //Debug.Log("!");
-            }
+            if(hit.collider.Is(out TestObject body))
+                body.AttachedVoxelBody.SetVoxel(hit.point, IVoxelVolume.Empty);
         }
     }
 
