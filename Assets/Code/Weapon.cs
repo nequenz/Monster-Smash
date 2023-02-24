@@ -35,8 +35,7 @@ public class Weapon : MonoBehaviour
 
     private void Awake()
     {
-        _shootDelayTimer.Set(_shootDelay, OnWhileAfterShoot, () => _isAfterShoot = false );
-        _reloadDelayTimer.Set(_reloadDelay, OnWhileReload, () => _isReloading = false);
+        InitTimers();
         RedistributeAmmoToClip();
     }
 
@@ -44,6 +43,17 @@ public class Weapon : MonoBehaviour
     {
         _shootDelayTimer.Update(Time.deltaTime);
         _reloadDelayTimer.Update(Time.deltaTime);
+    }
+
+    private void InitTimers()
+    {
+        _shootDelayTimer.Set(_shootDelay, OnWhileAfterShoot, () => _isAfterShoot = false);
+
+        _reloadDelayTimer.Set(_reloadDelay, OnWhileReload, () =>
+        {
+            _isReloading = false;
+            RedistributeAmmoToClip();
+        });
     }
 
     protected virtual void OnShoot(Vector3 direction) 
@@ -107,16 +117,16 @@ public class Weapon : MonoBehaviour
             OnAmmoClipZeroReached();
             AmmoClipZeroReached?.Invoke();
 
-            if (_isAutoReloading)
+            if (_isAutoReloading && _currentAmmoClip > 0)
                 Reload();
+            else
+                RedistributeAmmoToClip();
         }
         else
         {
             _isAfterShoot = true;
             _shootDelayTimer.Start();
         }
-
-        
     }
 
     protected int CalculateAvailableClipAmmo(int countToDecrease)
