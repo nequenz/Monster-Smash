@@ -6,6 +6,7 @@ using System;
 public class EachFrameTimer
 {
     private Action<float, float> _action;
+    private Action _finishAction;
     private float _currentTime;
     private float _timeToRun;
 
@@ -17,10 +18,11 @@ public class EachFrameTimer
     public bool IsRunning => _currentTime > 0.0f;
 
 
-    public void Set(float timeToRun, Action<float, float> action)
+    public void Set(float timeToRun, Action<float, float> action, Action finishAction)
     {
         _timeToRun = timeToRun;
         _action = action;
+        _finishAction = finishAction;
     }
 
     public void Start()
@@ -42,7 +44,13 @@ public class EachFrameTimer
             _action(_currentTime, _timeToRun);
 
             if (_currentTime <= 0.0f)
+            {
+                if (_finishAction is not null)
+                    _finishAction();
+
                 Finished?.Invoke();
+            }
+                
         }
     }
 }

@@ -8,11 +8,14 @@ public class Weapon : MonoBehaviour
     [SerializeField] private int _ammoClipSize = 10;
     [SerializeField] private float _shootDelay = 0.5f;
     [SerializeField] private float _reloadDelay = 3.0f;
+    [SerializeField] private bool _isAutoReloading = true;
+    private EachFrameTimer _shootDelayTimer = new();
+    private EachFrameTimer _reloadDelayTimer = new();
     private int _currentAmmoClip = 0;
     private bool _isReloading = false;
     private bool _isAfterShoot = false;
-
-
+    
+    
     [SerializeField] protected Projectile MainProjectilePrefab;
     [SerializeField] protected Transform MainShootMain;
 
@@ -32,19 +35,35 @@ public class Weapon : MonoBehaviour
 
     private void Awake()
     {
+        _shootDelayTimer.Set(_shootDelay, OnWhileAfterShoot, () => _isAfterShoot = false );
+        _reloadDelayTimer.Set(_reloadDelay, OnWhileReload, () => _isReloading = false);
         RedistributeAmmoToClip();
     }
 
-    protected virtual void OnShoot() 
+    private void Update()
+    {
+        _shootDelayTimer.Update(Time.deltaTime);
+        _reloadDelayTimer.Update(Time.deltaTime);
+    }
+
+    protected virtual void OnShoot(Vector3 direction) 
     {
         int validAmmo = CalculateAvailableClipAmmo(1);
 
-        DescreaseClipAmmo(validAmmo);
-        CreateBullet(MainShootMain.position);
-
+        if(validAmmo == 1)
+        {
+            DescreaseClipAmmo(validAmmo);
+            Projectile projectile = CreateBullet(MainShootMain.position);
+            projectile.SetForce(direction);
+        }
+ 
     }
 
+    protected virtual void OnWhileAfterShoot(float currentDelayMS, float maxDelay) { }
+
     protected virtual void OnReload() { }
+
+    protected virtual void OnWhileReload(float currentDelayMS, float maxDelay) { }
 
     protected virtual void OnAmmoZeroReach() { }
 
@@ -81,13 +100,23 @@ public class Weapon : MonoBehaviour
 
     protected void DescreaseClipAmmo(int count)
     {
-        _currentAmmoClip = Math.Clamp(_currentAmmoClip, 0, int.MaxValue);
+        _currentAmmoClip = Math.Clamp(_currentAmmoClip - count, 0, int.MaxValue);
 
-        if(_currentAmmoClip == 0)
+        if (_currentAmmoClip == 0)
         {
             OnAmmoClipZeroReached();
             AmmoClipZeroReached?.Invoke();
+
+            if (_isAutoReloading)
+                Reload();
         }
+        else
+        {
+            _isAfterShoot = true;
+            _shootDelayTimer.Start();
+        }
+
+        
     }
 
     protected int CalculateAvailableClipAmmo(int countToDecrease)
@@ -96,6 +125,11 @@ public class Weapon : MonoBehaviour
 
         return availableClipAmmo >= 0
             ? countToDecrease : countToDecrease + (availableClipAmmo);
+    }
+
+    public void SetReloadMode(bool isAuto)
+    {
+        _isAutoReloading = isAuto;
     }
 
     public void AddAmmoCount(int count)
@@ -108,15 +142,25 @@ public class Weapon : MonoBehaviour
         _ammoCount = count;
     }
 
-    public void Shoot()
+    public void Shoot(Vector3 direction)
     {
-        OnShoot();
-        Shooted?.Invoke();
+        if(_isAfterShoot == false && _isReloading == false)
+        {
+            OnShoot(direction);
+            Shooted?.Invoke();
+        }
+   
     }
 
     public void Reload()
     {
-        OnReload();
-        Reloaded?.Invoke();
+        if(_isAfterShoot == false && _isAfterShoot == false)
+        {
+            _isReloading = true;
+            _reloadDelayTimer.Start();
+
+            OnReload();
+            Reloaded?.Invoke();
+        }
     }
 }
