@@ -6,4 +6,4 @@ You can also open the documentation by clicking the "Documentation" icon at the 
 
 You can find all demo scenes in the Examples folder (e.g. Plugins/CW/***/Examples), which take you step by step through each feature.
 
-Enjoy!
+Enjoy!!
