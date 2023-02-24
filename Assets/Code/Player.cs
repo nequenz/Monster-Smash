@@ -41,8 +41,6 @@ public sealed class Player : MonoBehaviour
 
     private void AttachInputs()
     {
-        const float ForceShot = 300f;
-
         _input.AttachAction(-1, () => _move.Move(_move.AttachedTransform.forward), KeyMode.Hold, KeyCode.W);
         _input.AttachAction(-1, () => _move.Move(_move.AttachedTransform.forward * -1), KeyMode.Hold, KeyCode.S);
         _input.AttachAction(-1, () => _move.Move(_move.AttachedTransform.right), KeyMode.Hold, KeyCode.D);
@@ -62,7 +60,8 @@ public sealed class Player : MonoBehaviour
 
         _input.AttachAction(-1, () =>
         {
-            _weapon.Shoot(transform.position.GetNormalTo(_gameCamera.GetAimPosition()) * ForceShot);
+            if(_weapon is not null)
+                _weapon.Shoot(transform.position.GetNormalTo(_gameCamera.GetAimPosition()));
 
         }, KeyMode.Hold, KeyCode.Mouse0);
     }
@@ -74,7 +73,6 @@ public sealed class Player : MonoBehaviour
         if (weapon is null)
             return;
 
-        weapon.transform.parent = _gameCamera.transform;
-        weapon.transform.localPosition = new Vector3(0.15f,0f,0.30f);
+        weapon.EquipToObject(_gameCamera.transform);
     }
 }

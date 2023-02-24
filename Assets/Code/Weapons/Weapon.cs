@@ -2,21 +2,20 @@ using System;
 using UnityEngine;
 
 
-public class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour
 {
     [SerializeField] private int _ammoCount = 100;
     [SerializeField] private int _ammoClipSize = 10;
     [SerializeField] private float _shootDelay = 0.5f;
     [SerializeField] private float _reloadDelay = 3.0f;
     [SerializeField] private bool _isAutoReloading = true;
+    [SerializeField] private Vector3 _firstPersonOffset;
+    [SerializeField] private float _projectileSpeed;
     private EachFrameTimer _shootDelayTimer = new();
     private EachFrameTimer _reloadDelayTimer = new();
     private int _currentAmmoClip = 0;
     private bool _isReloading = false;
     private bool _isAfterShoot = false;
-    //-----------temp
-    [SerializeField] private ParticleSystem _afterShotEffect;
-    //-----------temp
     
     
     [SerializeField] protected Projectile MainProjectilePrefab;
@@ -34,6 +33,8 @@ public class Weapon : MonoBehaviour
     public int CurrentAmmoClip => _currentAmmoClip;
     public bool IsReloading => _isReloading;
     public bool IsAfterShoot => _isAfterShoot;
+    public float ProjectileSpeed => _projectileSpeed;
+    public Vector3 FirstPersonViewOffset => _firstPersonOffset;
 
 
     private void Awake()
@@ -59,33 +60,37 @@ public class Weapon : MonoBehaviour
         });
     }
 
-    protected virtual void OnShoot(Vector3 direction) 
-    {
-        int validAmmo = CalculateAvailableClipAmmo(1);
+    protected abstract void OnAwake();
 
-        if(validAmmo == 1)
-        {
-            Projectile projectile = CreateBullet(MainShootMain.position);
-            _afterShotEffect.Play();
-            DescreaseClipAmmo(validAmmo);
-            projectile.SetForce(direction);
-        }
- 
-    }
+    protected abstract void OnUpdate();
 
-    protected virtual void OnWhileAfterShoot(float currentDelayMS, float maxDelay) { }
+    protected abstract void OnShoot(Vector3 direction);
 
-    protected virtual void OnReload() { }
+    protected abstract void OnWhileAfterShoot(float currentDelayMS, float maxDelay) ;
 
-    protected virtual void OnWhileReload(float currentDelayMS, float maxDelay) { }
+    protected abstract void OnReload();
 
-    protected virtual void OnAmmoZeroReach() { }
+    protected abstract void OnWhileReload(float currentDelayMS, float maxDelay);
 
-    protected virtual void OnAmmoClipZeroReached() { }
+    protected abstract void OnAmmoZeroReach();
 
-    protected virtual Projectile CreateBullet(Vector3 position)
+    protected abstract void OnAmmoClipZeroReach();
+
+    protected virtual Projectile CreateProjectile(Vector3 position)
     {
         return Instantiate(MainProjectilePrefab, position, Quaternion.identity);
+    }
+
+    protected Vector3 CalculateSpread(Vector3 nativeDirection, Vector3 angles)
+    {
+        Vector3 anglesSpread = default;
+
+        angles /= 2;
+        anglesSpread.x = UnityEngine.Random.Range(-angles.x, angles.x);
+        anglesSpread.y = UnityEngine.Random.Range(-angles.y, angles.y);
+        anglesSpread.z = UnityEngine.Random.Range(-angles.z, angles.z);
+
+        return Quaternion.Euler(anglesSpread) * nativeDirection;
     }
 
     protected void RedistributeAmmoToClip()
@@ -95,7 +100,7 @@ public class Weapon : MonoBehaviour
         if(_ammoCount <= 0)
         {
             OnAmmoZeroReach();
-            AmmoClipZeroReached?.Invoke();
+            AmmoZeroReached?.Invoke();
 
             return;
         }
@@ -118,7 +123,7 @@ public class Weapon : MonoBehaviour
 
         if (_currentAmmoClip == 0)
         {
-            OnAmmoClipZeroReached();
+            OnAmmoClipZeroReach();
             AmmoClipZeroReached?.Invoke();
 
             if (_isAutoReloading && _currentAmmoClip > 0)
@@ -141,6 +146,12 @@ public class Weapon : MonoBehaviour
             ? countToDecrease : countToDecrease + (availableClipAmmo);
     }
 
+    public void EquipToObject(Transform parent)
+    {
+        transform.parent = parent;
+        transform.localPosition = _firstPersonOffset;
+    }
+
     public void SetReloadMode(bool isAuto)
     {
         _isAutoReloading = isAuto;
@@ -160,7 +171,7 @@ public class Weapon : MonoBehaviour
     {
         if(_isAfterShoot == false && _isReloading == false)
         {
-            OnShoot(direction);
+            OnShoot(direction.normalized * _projectileSpeed);
             Shooted?.Invoke();
         }
    
