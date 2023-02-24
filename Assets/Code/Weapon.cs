@@ -14,6 +14,9 @@ public class Weapon : MonoBehaviour
     private int _currentAmmoClip = 0;
     private bool _isReloading = false;
     private bool _isAfterShoot = false;
+    //-----------temp
+    [SerializeField] private ParticleSystem _afterShotEffect;
+    //-----------temp
     
     
     [SerializeField] protected Projectile MainProjectilePrefab;
@@ -62,8 +65,9 @@ public class Weapon : MonoBehaviour
 
         if(validAmmo == 1)
         {
-            DescreaseClipAmmo(validAmmo);
             Projectile projectile = CreateBullet(MainShootMain.position);
+            _afterShotEffect.Play();
+            DescreaseClipAmmo(validAmmo);
             projectile.SetForce(direction);
         }
  
