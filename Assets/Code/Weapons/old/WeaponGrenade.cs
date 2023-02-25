@@ -22,7 +22,7 @@ public sealed class WeaponGrenade : Weapon
             ProjectileBasic projectile = CreateProjectile(MainShootMain.position);
 
             DescreaseClipAmmo(validAmmo);
-            projectile.SetShotForce(direction);
+            projectile.SetInitialShotForce(direction);
         }
     }
 

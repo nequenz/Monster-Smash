@@ -16,26 +16,6 @@ public abstract class ProjectileBasic : MonoBehaviour
     public bool HasLifeTime => _hasLifeTime;
 
 
-    private void Awake()
-    {
-        _body = GetComponent<Rigidbody>();
-
-        if(_hasLifeTime)
-        {
-            _waiter = new WaitForSeconds(_lifeTime);
-            StartCoroutine(ReduceLifeTime());
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if(Physics.Raycast(transform.position, _body.velocity, out RaycastHit hit, 2f))
-        {
-            if(hit.collider.Is(out TestObject body))
-                body.AttachedVoxelBody.SetVoxel(hit.point, IVoxelVolume.Empty);
-        }
-    }
-
     private IEnumerator ReduceLifeTime()
     {
         while (true)
@@ -46,9 +26,25 @@ public abstract class ProjectileBasic : MonoBehaviour
         }
     }
 
-    protected abstract void OnAwake();
+    protected virtual void Awake()
+    {
+        _body = GetComponent<Rigidbody>();
 
-    protected abstract void OnFixedUpdate();
+        if(_hasLifeTime)
+        {
+            _waiter = new WaitForSeconds(_lifeTime);
+            StartCoroutine(ReduceLifeTime());
+        }
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        if(Physics.Raycast(transform.position, _body.velocity, out RaycastHit hit, 2f))
+        {
+            if(hit.collider.Is(out TestObject body))
+                body.AttachedVoxelBody.SetVoxel(hit.point, IVoxelVolume.Empty);
+        }
+    }
 
     protected RaycastHit Raycast(float maxDistance)
     {
@@ -57,7 +53,7 @@ public abstract class ProjectileBasic : MonoBehaviour
         return hit;
     }
 
-    public virtual void SetShotForce(Vector3 direction)
+    public virtual void SetInitialShotForce(Vector3 direction)
     {
         _body.AddForce(direction);
     }

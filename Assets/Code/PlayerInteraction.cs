@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System;
 
+
 [Serializable]
 public class PlayerInteraction
 {
-    [SerializeField, SubclassSelector] private Transform _rightHand;
-    [SerializeField, SubclassSelector] private Transform _leftHand;
+    [SerializeField] private Transform _rightHand;
+    [SerializeField] private Transform _leftHand;
     private Player _player;
     private PlayerMove _move;
     private GameCamera _camera;
@@ -46,8 +47,10 @@ public class PlayerInteraction
         if (item is null)
             return;
 
+        DropItem();
+
         _currentItem = item;
-        _currentItem.EquipToObject(InteractionObject);
+        _currentItem.EquipToObject(InteractionObject, _player.transform);
         ItemEquipped?.Invoke(_currentItem);
     }
 

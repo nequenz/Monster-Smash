@@ -126,7 +126,8 @@ GameObject:
   - component: {fileID: 1947289224879250219}
   - component: {fileID: 1947289224880053003}
   - component: {fileID: 1947289224881019339}
-  - component: {fileID: 1947289224878850464}
+  - component: {fileID: 1536863665550688955}
+  - component: {fileID: 8477109228524648750}
   m_Layer: 0
   m_Name: Weapon M4
   m_TagString: Untagged
@@ -141,7 +142,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1947289224878753547}
-  m_LocalRotation: {x: -0, y: 0.9935531, z: 0.113367975, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 5.151, y: 1.0123286, z: -5.459105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -202,7 +203,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1947289224878850464
+--- !u!65 &1536863665550688955
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947289224878753547}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.03434936, y: 0.19232099, z: 0.97656214}
+  m_Center: {x: 0, y: -0.06046728, z: 0.009858891}
+--- !u!114 &8477109228524648750
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -211,18 +225,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1947289224878753547}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76518a688815ee542b8d05cffde7ea72, type: 3}
+  m_Script: {fileID: 11500000, guid: 76a34df5350fe0d41a3db9e2af09ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _firstPersonOffset: {x: 0.15, y: -0.09, z: 0.3}
+  _firstPersonRotation: {x: 0, y: 180, z: 0}
+  _usingDelay: 0.1
+  _blockedToUse: 0
+  _canBeEquipped: 1
+  _isAnimated: 1
   _ammoCount: 200
-  _ammoClipSize: 48
-  _shootDelay: 0.1
+  _ammoClipSize: 30
   _reloadDelay: 3
   _isAutoReloading: 1
-  _firstPersonOffset: {x: 0.15, y: -0.09, z: 0.3}
-  _projectileSpeed: 400
+  _projectileSpeed: 500
   MainProjectilePrefab: {fileID: -5858915871207520259, guid: 3e3bfd57d03e4954db001bf904b2cd25, type: 3}
   MainShootMain: {fileID: 1947289224471872187}
+  _angleShotSpread: {x: 0, y: 0, z: 0}
   _afterShotEffect: {fileID: 1947289225848264383}
 --- !u!1 &1947289224878753551
 GameObject:

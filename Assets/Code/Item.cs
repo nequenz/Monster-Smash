@@ -1,22 +1,23 @@
 ﻿using UnityEngine;
-using System;
-
 
 
 public abstract class Item : MonoBehaviour
 {
     [Header("Item params")]
     [SerializeField] private Vector3 _firstPersonOffset;
+    [SerializeField] private Vector3 _firstPersonRotation;
     [SerializeField] private float _usingDelay = 1.0f;
     [SerializeField] private bool _blockedToUse = false;
     [SerializeField] private bool _canBeEquipped = true;
     [SerializeField] private bool _isAnimated = true;
     private EachFrameTimer _usingDelayTimer = new();
+    private Transform _user;
 
 
+    public Transform User => _user;
     public bool BlockedToUse => _blockedToUse;
     public bool IsUsing => _usingDelayTimer.IsRunning;
-    public bool IsEquipped => transform.parent is not null;
+    public bool IsEquipped => transform.parent is not null && _user is not null;
     public bool CanBeEquipped => _canBeEquipped;
     public Vector3 FirstPersonOffset => _firstPersonOffset;
 
@@ -48,6 +49,8 @@ public abstract class Item : MonoBehaviour
 
     protected abstract void OnEquip(Transform parent);
 
+    protected abstract void OnUnequip();
+
     protected abstract void OnWhileUsing(float currentMS, float maxDelay);
 
     protected abstract void OnFinishUsing();
@@ -64,22 +67,23 @@ public abstract class Item : MonoBehaviour
 
     public void Use()
     {
-        if(BlockedToUse == false && IsUsing == false && transform.parent is not null)
+        if(BlockedToUse == false && IsUsing == false && IsEquipped)
         {
-            _usingDelayTimer.Start();
             OnUse();
+            _usingDelayTimer.Start();
         }
     }
 
-    public void EquipToObject(Transform parent)
+    public void EquipToObject(Transform parent, Transform user)
     {
-        if (parent is null && _canBeEquipped == false)
+        if (parent is null || user is null && _canBeEquipped == false)
             return;
 
-        if (transform.parent is not null)
-            Unequip();
+        Unequip();
 
+        _user = user;
         transform.parent = parent;
+        transform.localRotation = Quaternion.Euler(_firstPersonRotation.x, _firstPersonRotation.y, _firstPersonRotation.z);
         transform.localPosition = _firstPersonOffset;
 
         OnEquip(parent);
@@ -87,7 +91,13 @@ public abstract class Item : MonoBehaviour
 
     public void Unequip()
     {
-        if(transform.parent is not null)
+        if(IsEquipped)
+        {
             transform.parent = null;
+            _user = null;
+
+            OnUnequip();
+        }
+            
     }
 }

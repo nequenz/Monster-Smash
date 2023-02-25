@@ -28,7 +28,7 @@ public sealed class WeaponM4 : Weapon
 
             _afterShotEffect.Play();
             DescreaseClipAmmo(validAmmo);
-            projectile.SetShotForce(CalculateSpread(direction, new Vector3(5, 5, 5)));
+            projectile.SetInitialShotForce(CalculateSpread(direction, new Vector3(5, 5, 5)));
         }
 
     }

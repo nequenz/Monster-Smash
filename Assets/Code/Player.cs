@@ -9,9 +9,9 @@ public sealed class Player : MonoBehaviour
     [SerializeReference] private PlayerInteraction _interaction = new();
     [SerializeReference] private LocalInput _input = new();
     [SerializeField] private GameCamera _gameCamera;
-    [SerializeField] private Weapon _weapon;
 
 
+    public GameCamera AttachedCamera => _gameCamera;
     public PlayerInteraction AttachedPlayerInteraction => _interaction;
 
 
@@ -20,7 +20,6 @@ public sealed class Player : MonoBehaviour
         Rigidbody rigid = GetComponent<Rigidbody>();
 
         AttachInputs();
-        EquipWeapon(_weapon);
         _move.Init(rigid, transform);
         _interaction.Init(this, _move, _gameCamera);
     }
@@ -52,6 +51,7 @@ public sealed class Player : MonoBehaviour
         _input.AttachAction(-1, () => _move.Move(_move.AttachedTransform.right), KeyMode.Hold, KeyCode.D);
         _input.AttachAction(-1, () => _move.Move(_move.AttachedTransform.right * -1), KeyMode.Hold, KeyCode.A);
         _input.AttachAction(-1, () => _move.Jump(), KeyMode.Hold, KeyCode.Space);
+        _input.AttachAction(-1, () => _interaction.UseItem(), KeyMode.Hold, KeyCode.Mouse0);
 
         _input.AttachAction(-1, () =>
         {
@@ -64,22 +64,6 @@ public sealed class Player : MonoBehaviour
 
         }, KeyMode.Down, KeyCode.F);
 
-        _input.AttachAction(-1, () =>
-        {
-            //if(_weapon is not null)
-            //    _weapon.Shoot(transform.position.GetNormalTo(_gameCamera.GetAimPosition()));
-            _interaction.UseItem();
-
-        }, KeyMode.Hold, KeyCode.Mouse0);
-    }
-
-    //---------weapon holder
-
-    private void EquipWeapon(Weapon weapon)
-    {
-        if (weapon is null)
-            return;
-
-        weapon.EquipToObject(_gameCamera.transform);
+     
     }
 }

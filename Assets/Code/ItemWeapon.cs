@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class ItemWeapon : Item
 {
+    [Header("Weapon params")]
     [SerializeField] private int _ammoCount = 100;
     [SerializeField] private int _ammoClipSize = 10;
     [SerializeField] private float _reloadDelay = 3.0f;
@@ -116,11 +117,6 @@ public abstract class ItemWeapon : Item
 
     protected abstract void OnAmmoClipZeroReach();
 
-    protected override void OnUse()
-    {
-        
-    }
-
     public void SetReloadMode(bool isAuto)
     {
         _isAutoReloading = isAuto;
@@ -143,7 +139,6 @@ public abstract class ItemWeapon : Item
             OnShoot(direction.normalized * _projectileSpeed);
             Shooted?.Invoke();
         }
-
     }
 
     public void Reload()
