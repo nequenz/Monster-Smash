@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
-public sealed class WeaponGrenade : Weapon
+public sealed class WeaponGrenade : WeaponBasic
 {
+
     protected override void OnAwake()
     {
 
@@ -18,7 +19,7 @@ public sealed class WeaponGrenade : Weapon
 
         if (validAmmo == 1)
         {
-            Projectile projectile = CreateProjectile(MainShootMain.position);
+            ProjectileBasic projectile = CreateProjectile(MainShootMain.position);
 
             DescreaseClipAmmo(validAmmo);
             projectile.SetShotForce(direction);

@@ -35,7 +35,7 @@ public static class ObjectPool
     public const int VoxelParticleCountMax = 32;
 
 
-    private static Projectile[] _projectilePool = new Projectile[ProjectileCountMax];
+    private static ProjectileBasic[] _projectilePool = new ProjectileBasic[ProjectileCountMax];
     private static VoxelParticle[] _voxelPool = new VoxelParticle[VoxelParticleCountMax];
     private static object[] _pools = 
     {

@@ -6,9 +6,10 @@ using System;
 public sealed class Player : MonoBehaviour
 {
     [SerializeReference] private PlayerMove _move = new();
+    [SerializeReference] private PlayerInteraction _interaction = new();
     [SerializeReference] private LocalInput _input = new();
     [SerializeField] private GameCamera _gameCamera;
-    [SerializeField] private Weapon _weapon;
+    [SerializeField] private WeaponBasic _weapon;
 
 
     private void Awake()
@@ -18,6 +19,7 @@ public sealed class Player : MonoBehaviour
         AttachInputs();
         EquipWeapon(_weapon);
         _move.Init(rigid, transform);
+        _interaction.Init(this, _move);
     }
 
     private void Update()
@@ -68,7 +70,7 @@ public sealed class Player : MonoBehaviour
 
     //---------weapon holder
 
-    private void EquipWeapon(Weapon weapon)
+    private void EquipWeapon(WeaponBasic weapon)
     {
         if (weapon is null)
             return;

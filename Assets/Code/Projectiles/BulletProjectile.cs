@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
-public class BulletProjectile : Projectile
+public class BulletProjectile : ProjectileBasic
 {
     protected override void OnAwake()
     {
-        throw new System.NotImplementedException();
+        
     }
 
     protected override void OnFixedUpdate()
     {
-        throw new System.NotImplementedException();
+       
     }
 }

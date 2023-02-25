@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-public abstract class Weapon : MonoBehaviour
+public abstract class WeaponBasic : MonoBehaviour
 {
     [SerializeField] private int _ammoCount = 100;
     [SerializeField] private int _ammoClipSize = 10;
@@ -18,7 +18,7 @@ public abstract class Weapon : MonoBehaviour
     private bool _isAfterShoot = false;
     
     
-    [SerializeField] protected Projectile MainProjectilePrefab;
+    [SerializeField] protected ProjectileBasic MainProjectilePrefab;
     [SerializeField] protected Transform MainShootMain;
 
 
@@ -35,6 +35,7 @@ public abstract class Weapon : MonoBehaviour
     public bool IsAfterShoot => _isAfterShoot;
     public float ProjectileSpeed => _projectileSpeed;
     public Vector3 FirstPersonViewOffset => _firstPersonOffset;
+    public bool IsEquipped => transform.parent is not null;
 
 
     private void Awake()
@@ -45,8 +46,15 @@ public abstract class Weapon : MonoBehaviour
 
     private void Update()
     {
+        const float AngleSpeed = 15f;
+
         _shootDelayTimer.Update(Time.deltaTime);
         _reloadDelayTimer.Update(Time.deltaTime);
+
+        if(IsEquipped == false)
+        {
+            transform.rotation *= Quaternion.AngleAxis(Time.deltaTime * AngleSpeed, Vector3.up);
+        }
     }
 
     private void InitTimers()
@@ -76,7 +84,7 @@ public abstract class Weapon : MonoBehaviour
 
     protected abstract void OnAmmoClipZeroReach();
 
-    protected virtual Projectile CreateProjectile(Vector3 position)
+    protected virtual ProjectileBasic CreateProjectile(Vector3 position)
     {
         return Instantiate(MainProjectilePrefab, position, Quaternion.identity);
     }

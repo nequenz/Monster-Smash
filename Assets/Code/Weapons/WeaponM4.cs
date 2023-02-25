@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public sealed class WeaponM4 : Weapon
+public sealed class WeaponM4 : WeaponBasic
 {
     [SerializeField] private ParticleSystem _afterShotEffect;
     private Vector3 _lastShotDirection;
@@ -23,7 +23,7 @@ public sealed class WeaponM4 : Weapon
 
         if (validAmmo == 1)
         {
-            Projectile projectile = CreateProjectile(MainShootMain.position);
+            ProjectileBasic projectile = CreateProjectile(MainShootMain.position);
             _lastShotDirection = direction;
 
             _afterShotEffect.Play();

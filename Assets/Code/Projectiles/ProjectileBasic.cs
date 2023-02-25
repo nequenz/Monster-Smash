@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Rigidbody))]
-public abstract class Projectile : MonoBehaviour
+public abstract class ProjectileBasic : MonoBehaviour
 {
     [SerializeField] private float _lifeTime = 5.0f;
     [SerializeField] private bool _hasLifeTime = true;

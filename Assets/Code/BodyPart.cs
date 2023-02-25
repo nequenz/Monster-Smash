@@ -31,7 +31,7 @@ public class BodyPart : MonoBehaviour
         Collided?.Invoke(otherCollision);
 
         ///TEST
-        if(otherCollision.collider.Is<Projectile>())
+        if(otherCollision.collider.Is<ProjectileBasic>())
             Detach();
     }
 
