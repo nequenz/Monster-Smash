@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-public abstract class WeaponBasic : MonoBehaviour
+public abstract class Weapon : MonoBehaviour
 {
     [SerializeField] private int _ammoCount = 100;
     [SerializeField] private int _ammoClipSize = 10;

@@ -9,7 +9,10 @@ public sealed class Player : MonoBehaviour
     [SerializeReference] private PlayerInteraction _interaction = new();
     [SerializeReference] private LocalInput _input = new();
     [SerializeField] private GameCamera _gameCamera;
-    [SerializeField] private WeaponBasic _weapon;
+    [SerializeField] private Weapon _weapon;
+
+
+    public PlayerInteraction AttachedPlayerInteraction => _interaction;
 
 
     private void Awake()
@@ -19,12 +22,13 @@ public sealed class Player : MonoBehaviour
         AttachInputs();
         EquipWeapon(_weapon);
         _move.Init(rigid, transform);
-        _interaction.Init(this, _move);
+        _interaction.Init(this, _move, _gameCamera);
     }
 
     private void Update()
     {
         _input.Update();
+        _interaction.Update(Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -62,15 +66,16 @@ public sealed class Player : MonoBehaviour
 
         _input.AttachAction(-1, () =>
         {
-            if(_weapon is not null)
-                _weapon.Shoot(transform.position.GetNormalTo(_gameCamera.GetAimPosition()));
+            //if(_weapon is not null)
+            //    _weapon.Shoot(transform.position.GetNormalTo(_gameCamera.GetAimPosition()));
+            _interaction.UseItem();
 
         }, KeyMode.Hold, KeyCode.Mouse0);
     }
 
     //---------weapon holder
 
-    private void EquipWeapon(WeaponBasic weapon)
+    private void EquipWeapon(Weapon weapon)
     {
         if (weapon is null)
             return;

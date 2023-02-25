@@ -3,67 +3,71 @@ using System;
 
 
 
-public class Item : MonoBehaviour
+public abstract class Item : MonoBehaviour
 {
     [Header("Item params")]
     [SerializeField] private Vector3 _firstPersonOffset;
     [SerializeField] private float _usingDelay = 1.0f;
     [SerializeField] private bool _blockedToUse = false;
     [SerializeField] private bool _canBeEquipped = true;
+    [SerializeField] private bool _isAnimated = true;
     private EachFrameTimer _usingDelayTimer = new();
 
 
-    public event Action<Transform> Equipped;
-    public event Action Used;
-
-
     public bool BlockedToUse => _blockedToUse;
-    public bool IsUsing => _usingDelayTimer.IsRunning == false;
+    public bool IsUsing => _usingDelayTimer.IsRunning;
     public bool IsEquipped => transform.parent is not null;
+    public bool CanBeEquipped => _canBeEquipped;
+    public Vector3 FirstPersonOffset => _firstPersonOffset;
 
+    //tempory
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.Is(out Player player))
+        {
+            player.AttachedPlayerInteraction.EquipItem(this);
+        }
+    }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _usingDelayTimer.Set(_usingDelay, OnWhileUsing, OnFinishUsing);
-        OnAwake();
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         _usingDelayTimer.Update(Time.deltaTime);
-        OnUpdate();
+
+        const float RotationSpeed = 35f;
+
+        if (_isAnimated && IsEquipped == false)
+            transform.rotation *= Quaternion.AngleAxis(RotationSpeed * Time.deltaTime, Vector3.up);
     }
 
-    protected virtual void OnAwake() { }
+    protected abstract void OnUse();
 
-    protected virtual void OnUpdate() { }
+    protected abstract void OnEquip(Transform parent);
 
-    protected virtual void OnUse() 
+    protected abstract void OnWhileUsing(float currentMS, float maxDelay);
+
+    protected abstract void OnFinishUsing();
+
+    public void SetBlockMode(bool isBlocked)
     {
-        Debug.Log("OnUse!");
+        _blockedToUse = isBlocked;
     }
 
-    protected virtual void OnEquip(Transform parent) 
+    public void SetEquipMode(bool canBeEquipped)
     {
-        Debug.Log("OnEquip!");
+        _canBeEquipped = canBeEquipped;
     }
 
-    protected virtual void OnWhileUsing(float currentMS, float maxDealy) 
+    public void Use()
     {
-        Debug.Log("OnWhileUsing!");
-    }
-
-    protected virtual void OnFinishUsing() 
-    {
-        Debug.Log("OnFinishUsing!");
-    }
-
-    protected void Use()
-    {
-        if(BlockedToUse == false && IsUsing)
+        if(BlockedToUse == false && IsUsing == false && transform.parent is not null)
         {
+            _usingDelayTimer.Start();
             OnUse();
-            Used?.Invoke();
         }
     }
 
@@ -72,9 +76,18 @@ public class Item : MonoBehaviour
         if (parent is null && _canBeEquipped == false)
             return;
 
+        if (transform.parent is not null)
+            Unequip();
+
         transform.parent = parent;
         transform.localPosition = _firstPersonOffset;
 
-        Equipped?.Invoke(parent);
+        OnEquip(parent);
+    }
+
+    public void Unequip()
+    {
+        if(transform.parent is not null)
+            transform.parent = null;
     }
 }

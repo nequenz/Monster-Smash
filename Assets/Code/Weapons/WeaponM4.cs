@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public sealed class WeaponM4 : WeaponBasic
+public sealed class WeaponM4 : Weapon
 {
     [SerializeField] private ParticleSystem _afterShotEffect;
     private Vector3 _lastShotDirection;

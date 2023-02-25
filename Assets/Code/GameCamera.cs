@@ -10,8 +10,8 @@ public class GameCamera : MonoBehaviour
     [SerializeField] private bool _isAutoScreenCenter = true;
     [Header("First person parameters")]
     [SerializeField] private Vector2 _axiesFactor = new Vector2(2.35f, 1.15f);
-    [SerializeField] private Transform _objectToAttach;
     [SerializeField] private Vector3 _offset = default;
+    [SerializeField] private Transform _objectToAttach;
     private Camera _unityCamera;
     private Vector2 _angles;
 
@@ -36,8 +36,12 @@ public class GameCamera : MonoBehaviour
 
     private void Update()
     {
+        const float axisXLimit = 80f;
+
         _angles.y += Input.GetAxis("Mouse X") * _axiesFactor.x;
         _angles.x -= Input.GetAxis("Mouse Y") * _axiesFactor.y;
+        _angles.x = Mathf.Clamp(_angles.x, -axisXLimit, axisXLimit);
+
         transform.rotation = Quaternion.Euler(_angles);
     }
 

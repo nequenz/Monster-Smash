@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public sealed class WeaponGrenade : WeaponBasic
+public sealed class WeaponGrenade : Weapon
 {
 
     protected override void OnAwake()
