@@ -16,16 +16,6 @@ public abstract class ProjectileBasic : MonoBehaviour
     public bool HasLifeTime => _hasLifeTime;
 
 
-    private IEnumerator ReduceLifeTime()
-    {
-        while (true)
-        {
-            yield return _waiter;
-
-            Destroy(gameObject);
-        }
-    }
-
     protected virtual void Awake()
     {
         _body = GetComponent<Rigidbody>();
@@ -37,12 +27,24 @@ public abstract class ProjectileBasic : MonoBehaviour
         }
     }
 
+    private IEnumerator ReduceLifeTime()
+    {
+        while (true)
+        {
+            yield return _waiter;
+
+            OnLifeTimeZeroReach();
+        }
+    }
+
     protected RaycastHit Raycast(float maxDistance)
     {
         Physics.Raycast(transform.position, _body.velocity, out RaycastHit hit, maxDistance);
 
         return hit;
     }
+
+    protected abstract void OnLifeTimeZeroReach();
 
     public virtual void SetInitialShotForce(Vector3 direction)
     {

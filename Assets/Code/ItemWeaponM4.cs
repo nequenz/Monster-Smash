@@ -5,7 +5,7 @@ public sealed class ItemWeaponM4 : ItemWeapon
 {
     [Header("Concrete params")]
     [SerializeField] private Vector3 _angleShotSpread;
-    [SerializeField] private ParticleSystem _afterShotEffect;
+    [SerializeField] private ParticleSystem _afterShotVFX;
     private Vector3 _lastShotDirection;
 
 
@@ -41,7 +41,7 @@ public sealed class ItemWeaponM4 : ItemWeapon
             ProjectileBasic projectile = CreateProjectile(MainShootMain.position);
             _lastShotDirection = direction;
 
-            _afterShotEffect.Play();
+            _afterShotVFX.Play();
             DescreaseClipAmmo(validAmmo);
             projectile.SetInitialShotForce(CalculateSpread(direction, _angleShotSpread));
         }

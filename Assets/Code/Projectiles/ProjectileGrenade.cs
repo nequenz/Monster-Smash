@@ -8,14 +8,8 @@ public sealed class ProjectileGrenade : ProjectileBasic
         base.Awake();
     }
 
-    private void FixedUpdate()
+    protected override void OnLifeTimeZeroReach()
     {
-
+        Destroy(gameObject);
     }
-
-    private void OnDestroy()
-    {
-        
-    }
-
 }

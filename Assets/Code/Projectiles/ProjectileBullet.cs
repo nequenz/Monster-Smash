@@ -17,4 +17,9 @@ public class ProjectileBullet : ProjectileBasic
             Destroy(gameObject);
         }
     }
+
+    protected override void OnLifeTimeZeroReach()
+    {
+        Destroy(gameObject);
+    }
 }
