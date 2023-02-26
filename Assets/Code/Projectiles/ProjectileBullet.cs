@@ -7,10 +7,8 @@ public class ProjectileBullet : ProjectileBasic
         base.Awake();
     }
 
-    protected override void FixedUpdate()
+    private void FixedUpdate()
     {
-        base.FixedUpdate();
-
         RaycastHit hit = Raycast(2f);
 
         if(hit.collider is not null && hit.collider.Is(out TestObject body))

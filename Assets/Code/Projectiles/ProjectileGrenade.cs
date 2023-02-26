@@ -3,20 +3,19 @@
 
 public sealed class ProjectileGrenade : ProjectileBasic
 {
-
-    private void Update()
-    {
-
-    }
-
     protected override void Awake()
     {
+        base.Awake();
+    }
+
+    private void FixedUpdate()
+    {
 
     }
 
-    protected override void FixedUpdate()
+    private void OnDestroy()
     {
-
+        
     }
 
 }

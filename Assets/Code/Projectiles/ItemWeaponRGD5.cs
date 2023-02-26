@@ -1,14 +1,8 @@
 ﻿using UnityEngine;
 
 
-public sealed class ItemWeaponM4 : ItemWeapon
+public sealed class ItemWeaponRGD5 : ItemWeapon
 {
-    [Header("Concrete params")]
-    [SerializeField] private Vector3 _angleShotSpread;
-    [SerializeField] private ParticleSystem _afterShotEffect;
-    private Vector3 _lastShotDirection;
-
-
     protected override void Awake()
     {
         base.Awake();
@@ -19,7 +13,7 @@ public sealed class ItemWeaponM4 : ItemWeapon
         base.Update();
     }
 
-    protected override void OnUse()
+    protected override void OnUse() 
     {
         Vector3 directionToShoot;
 
@@ -32,24 +26,25 @@ public sealed class ItemWeaponM4 : ItemWeapon
         }
     }
 
-    protected override void OnShoot(Vector3 direction)
+    protected override void OnShoot(Vector3 direction) 
     {
         int validAmmo = CalculateAvailableClipAmmo(1);
 
         if (validAmmo == 1)
         {
             ProjectileBasic projectile = CreateProjectile(MainShootMain.position);
-            _lastShotDirection = direction;
 
-            _afterShotEffect.Play();
             DescreaseClipAmmo(validAmmo);
-            projectile.SetInitialShotForce(CalculateSpread(direction, _angleShotSpread));
+            projectile.SetInitialShotForce(direction);
         }
     }
 
     protected override void OnAmmoClipZeroReach() { }
 
-    protected override void OnAmmoZeroReach() { }
+    protected override void OnAmmoZeroReach()
+    {
+     
+    }
 
     protected override void OnEquip(Transform parent) { }
 
@@ -61,12 +56,5 @@ public sealed class ItemWeaponM4 : ItemWeapon
 
     protected override void OnWhileReload(float currentDelayMS, float maxDelay) { }
 
-    protected override void OnWhileUsing(float currentMS, float maxDelay)
-    {
-        Vector3 recoilNormal = transform.localPosition.GetNormalTo(_lastShotDirection);
-        float t = (Mathf.Rad2Deg / 2 / maxDelay) * currentMS;
-
-        transform.localPosition = FirstPersonOffset;
-        transform.position += recoilNormal * Mathf.Sin(t) * 0.1f;
-    }
+    protected override void OnWhileUsing(float currentMS, float maxDelay) { }
 }

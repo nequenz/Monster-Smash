@@ -12,7 +12,6 @@ public interface IVoxelMesh
     public Mesh BuiltMesh { get; }
     public float FaceSize { get; }
     public bool IsDirty { get; }
-    public float RebuildDelay { get; }
 
 
     public IVoxelMesh Init(IVoxelVolume voxels, IVolumeReadOnly<Color> colors, MeshFilter filter, float delay, float size);
@@ -22,8 +21,6 @@ public interface IVoxelMesh
     public void SetColorVolume(IVolumeReadOnly<Color> colors);
 
     public void SetMeshFilter(MeshFilter filter);
-
-    public void SetRebuildDelay(float delay);
 
     public void RebuildForced();
 

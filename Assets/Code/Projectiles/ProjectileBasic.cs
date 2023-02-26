@@ -37,15 +37,6 @@ public abstract class ProjectileBasic : MonoBehaviour
         }
     }
 
-    protected virtual void FixedUpdate()
-    {
-        if(Physics.Raycast(transform.position, _body.velocity, out RaycastHit hit, 2f))
-        {
-            if(hit.collider.Is(out TestObject body))
-                body.AttachedVoxelBody.SetVoxel(hit.point, IVoxelVolume.Empty);
-        }
-    }
-
     protected RaycastHit Raycast(float maxDistance)
     {
         Physics.Raycast(transform.position, _body.velocity, out RaycastHit hit, maxDistance);

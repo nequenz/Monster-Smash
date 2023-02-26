@@ -6,7 +6,6 @@ using UnityEngine;
 public class VoxelMesh : IVoxelMesh
 {
     [SerializeField] private float _sizeFactor = 1f;
-    [SerializeField] private float _rebuildDelay = 0.55f;
     [SerializeField] private MeshFilter _filter;
     private IVolumeReadOnly<Color> _colors;
     private IVoxelVolume _voxels;
@@ -23,12 +22,10 @@ public class VoxelMesh : IVoxelMesh
     public Mesh BuiltMesh => _mesh;
     public float FaceSize => _sizeFactor;
     public bool IsDirty => _isDirty;
-    public float RebuildDelay => _rebuildDelay;
 
 
     private void OnVoxelsChanged(Vector3Int position)
     {
-        //_currentDelay = Mathf.Clamp(_rebuildDelay, 0, _rebuildDelay);
         RebuildForced();
     }
 
@@ -69,7 +66,6 @@ public class VoxelMesh : IVoxelMesh
         SetVoxelVolume(voxels);
         SetColorVolume(colors);
         SetMeshFilter(filter);
-        SetRebuildDelay(delay);
         SetSize(size);
 
         return this;
@@ -95,8 +91,6 @@ public class VoxelMesh : IVoxelMesh
     {
         _filter = filter;
     }
-
-    public void SetRebuildDelay(float delay) => _rebuildDelay = delay;
 
     public void SetSize(float size)
     {
