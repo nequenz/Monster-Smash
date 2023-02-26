@@ -12,6 +12,7 @@ public class VoxelMesh : IVoxelMesh
     private Mesh _mesh;
     private float _currentDelay = 0.0f;
     private bool _isDirty = false;
+    private bool _isRebuildingSuspended = false;
 
 
     public event Action Rebuilt;
@@ -26,7 +27,8 @@ public class VoxelMesh : IVoxelMesh
 
     private void OnVoxelsChanged(Vector3Int position)
     {
-        RebuildForced();
+        if(_isRebuildingSuspended == false)
+            RebuildForced();
     }
 
     private void AddFace(Vector3 position, Quaternion rotation, Color color)
@@ -96,6 +98,16 @@ public class VoxelMesh : IVoxelMesh
     {
         _sizeFactor = size;
         _isDirty = true;
+    }
+
+    public void SuspendRebuilding()
+    {
+        _isRebuildingSuspended = true;
+    }
+
+    public void ResumeRebuilding()
+    {
+        _isRebuildingSuspended = false;
     }
 
     public void RebuildForced()

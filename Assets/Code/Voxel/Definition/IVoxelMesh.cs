@@ -22,6 +22,10 @@ public interface IVoxelMesh
 
     public void SetMeshFilter(MeshFilter filter);
 
+    public void SuspendRebuilding();
+
+    public void ResumeRebuilding();
+
     public void RebuildForced();
 
     public void SetSize(float size);
