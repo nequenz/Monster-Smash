@@ -35,9 +35,9 @@ public class TestObject : MonoBehaviour
     private void OnVoxelBodyChanged(Vector3Int position)
     {
         Vector3 worldPosition = _voxelBody.AttachedTransform.CalculateWorldPosition(position);
-
         VoxelParticle particle = Instantiate(_voxelParticlePrefab, worldPosition, Quaternion.identity);
-        particle.SetParams(_voxelBody.AttachedVoxelMesh.FaceSize, Color.white, _voxelBody.AttachedTransform.AttachedTransform.position);
+
+        _voxelBody.CalibrateParticle(particle, position);
     }
 
 

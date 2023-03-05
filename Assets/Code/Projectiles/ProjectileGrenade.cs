@@ -3,6 +3,9 @@
 
 public sealed class ProjectileGrenade : ProjectileBasic
 {
+    [SerializeField] private Explosion _explosion;
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -10,6 +13,8 @@ public sealed class ProjectileGrenade : ProjectileBasic
 
     protected override void OnLifeTimeZeroReach()
     {
+        Instantiate(_explosion, transform.position, Quaternion.identity);
+
         Destroy(gameObject);
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
+
 [Serializable]
-public class PlayerMove
+public class ActorDynamicMove
 {
     public const float NoFallingVelocity = 0.1f;
 
@@ -17,8 +18,6 @@ public class PlayerMove
     private bool _canJump = true;
 
 
-    public Rigidbody AttachedRigidbody => _body;
-    public Transform AttachedTransform => _transform;
     public bool IsFalling => _isFalling;
     public bool IsMoving => _isMoving;
     public bool CanMove => _canMove;
@@ -56,12 +55,12 @@ public class PlayerMove
             _body.AddForce(Vector3.up * _jumpHeight);
     }
 
-    public void Update()
+    public void Update(float deltaTime)
     {
 
     }
 
-    public void FixedUpdate()
+    public void FixedUpdate(float deltaTime)
     {
         if (Mathf.Abs(_body.velocity.y - _prevVelocity.y) < NoFallingVelocity)
             _isFalling = false;

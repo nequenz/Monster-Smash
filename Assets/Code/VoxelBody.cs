@@ -11,7 +11,7 @@ public class VoxelBody
     [SerializeField] private VoxelPrefabs _prefabToLoad;
 
 
-    public IVoxelMesh AttachedVoxelMesh => _mesh;
+    public IVoxelMesh AttchedMesh => _mesh;
     public IVoxelTransform AttachedTransform => _transform;
     public IVoxelVolume AttachedVolume => _voxels;
 
@@ -36,6 +36,14 @@ public class VoxelBody
     public void SetVoxel(Vector3 position, bool typeVoxel)
     {
         _voxels.SetValue(_transform.CalculateVoxelPosition(position), typeVoxel);
+    }
+
+    public void SetVoxels(Vector3 position, float radisu, bool typeVoxel)
+    {
+        _mesh.SuspendRebuilding();
+
+        _mesh.ResumeRebuilding();
+        _mesh.RebuildForced();
     }
 
     public bool GetVoxel(Vector3 position)

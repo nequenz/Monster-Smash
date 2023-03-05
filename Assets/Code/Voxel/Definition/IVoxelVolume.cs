@@ -7,11 +7,10 @@ public interface IVoxelVolume : IVolume<bool>
     public const bool Full = true;
 
 
-    public event Action Rebuilt;
+    public event Action Matched;
 
 
     public IVolumeReadOnly<Color> PrefabToBuild { get; }
-
 
     public IVoxelVolume Init(IVolumeReadOnly<Color> prefabToBuild, bool canBeReallocated);
 

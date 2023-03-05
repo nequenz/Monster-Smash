@@ -12,8 +12,9 @@ public class VoxelVolume : IVoxelVolume
     private IVolumeReadOnly<Color> _prefabToBuild;
     private bool _isChangeEventEnabled = true;
 
+
     public event Action<Vector3Int> Changed;
-    public event Action Rebuilt;
+    public event Action Matched;
 
 
     public IVolumeReadOnly<Color> PrefabToBuild => _prefabToBuild;
@@ -93,7 +94,7 @@ public class VoxelVolume : IVoxelVolume
 
         _isChangeEventEnabled = true;
 
-        Rebuilt?.Invoke();
+        Matched?.Invoke();
     }
 
     public void SetValue(Vector3Int position, bool value)

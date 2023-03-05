@@ -5,11 +5,11 @@ using System;
 [Serializable]
 public class EachFrameTimer
 {
+    [SerializeField] private float _timeToRun;
+    private float _currentTime;
     private Action<float, float> _action;
     private Action _finishAction;
-    private float _currentTime;
-    private float _timeToRun;
-
+    
 
     public event Action Started;
     public event Action Finished;
@@ -21,6 +21,12 @@ public class EachFrameTimer
     public void Set(float timeToRun, Action<float, float> action, Action finishAction)
     {
         _timeToRun = timeToRun;
+        _action = action;
+        _finishAction = finishAction;
+    }
+
+    public void Set(Action<float, float> action, Action finishAction)
+    {
         _action = action;
         _finishAction = finishAction;
     }

@@ -37,13 +37,7 @@ public class GameCamera : MonoBehaviour
 
     private void Update()
     {
-        const float axisXLimit = 80f;
-
-        _angles.y += Input.GetAxis("Mouse X") * _axiesFactor.x;
-        _angles.x -= Input.GetAxis("Mouse Y") * _axiesFactor.y;
-        _angles.x = Mathf.Clamp(_angles.x, -axisXLimit, axisXLimit);
-
-        transform.rotation = Quaternion.Euler(_angles);
+        UpdateFirstPersonView();
     }
 
     public void SetScreenPosition(Vector3 position) => _screenPosition = position;
@@ -53,4 +47,15 @@ public class GameCamera : MonoBehaviour
     public Ray Raycast() => _unityCamera.ScreenPointToRay(_screenPosition);
 
     public Vector3 GetAimPosition() => CalculatePositionByDistance(_aimDistance);
+
+    public void UpdateFirstPersonView()
+    {
+        const float axisXLimit = 80f;
+
+        _angles.y += Input.GetAxis("Mouse X") * _axiesFactor.x;
+        _angles.x -= Input.GetAxis("Mouse Y") * _axiesFactor.y;
+        _angles.x = Mathf.Clamp(_angles.x, -axisXLimit, axisXLimit);
+
+        transform.rotation = Quaternion.Euler(_angles);
+    }
 }

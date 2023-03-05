@@ -179,7 +179,6 @@ GameObject:
   - component: {fileID: 7638511899229807029}
   - component: {fileID: 7638511899230774133}
   - component: {fileID: 5926783528171194392}
-  - component: {fileID: 2558493740254427218}
   m_Layer: 0
   m_Name: Weapon RGD-5
   m_TagString: Untagged
@@ -268,31 +267,6 @@ CapsuleCollider:
   m_Height: 0.15676454
   m_Direction: 1
   m_Center: {x: 0, y: 0.027264815, z: 0}
---- !u!114 &2558493740254427218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7638511899228519861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0566dcfee5d22264689fe57eed163ab9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _firstPersonOffset: {x: 0.15, y: -0.09, z: 0.3}
-  _firstPersonRotation: {x: -15, y: 0, z: 25}
-  _usingDelay: 3
-  _blockedToUse: 0
-  _canBeEquipped: 1
-  _isAnimated: 1
-  _ammoCount: 10
-  _ammoClipSize: 10
-  _reloadDelay: 1
-  _isAutoReloading: 1
-  _projectileSpeed: 500
-  MainProjectilePrefab: {fileID: 808821575497571163, guid: 27e634561f5430149b96c32db8ad22b2, type: 3}
-  MainShootMain: {fileID: 7638511899311826446}
 --- !u!1 &7638511899311826445
 GameObject:
   m_ObjectHideFlags: 0

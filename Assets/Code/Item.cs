@@ -1,63 +1,41 @@
 ﻿using UnityEngine;
 
 
-public abstract class Item : MonoBehaviour
+public enum ItemIDs
 {
-    [Header("Item params")]
+    Undefined
+}
+
+[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Rigidbody))]
+public abstract class Item : MonoBehaviour, IDispatchableItem
+{
     [SerializeField] private Vector3 _firstPersonOffset;
     [SerializeField] private Vector3 _firstPersonRotation;
-    [SerializeField] private float _usingDelay = 1.0f;
-    [SerializeField] private bool _blockedToUse = false;
+    [SerializeField] private ItemIDs _id;
+    [SerializeField] private bool _isBlockedToUse = false;
     [SerializeField] private bool _canBeEquipped = true;
-    [SerializeField] private bool _isAnimated = true;
-    private EachFrameTimer _usingDelayTimer = new();
-    private Transform _user;
+    [SerializeField] private EachFrameTimer _usingDelayTimer = new();
+    protected ActorLiving Owner;
+    protected Transform TransformToEquip;
 
 
-    public Transform User => _user;
-    public bool BlockedToUse => _blockedToUse;
-    public bool IsUsing => _usingDelayTimer.IsRunning;
-    public bool IsEquipped => transform.parent is not null && _user is not null;
-    public bool CanBeEquipped => _canBeEquipped;
+    public ItemIDs ID => _id;
     public Vector3 FirstPersonOffset => _firstPersonOffset;
+    public Vector3 FirstPersonRotation => _firstPersonOffset;
+    public bool BlockedToUse => _isBlockedToUse;
+    public bool CanBeEquipped => _canBeEquipped;
 
-    //tempory
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.Is(out Player player))
-        {
-            player.AttachedPlayerInteraction.EquipItem(this);
-        }
-    }
 
-    protected virtual void Awake()
-    {
-        _usingDelayTimer.Set(_usingDelay, OnWhileUsing, OnFinishUsing);
-    }
+    protected abstract void OnSetTransformToEquip(Transform transform);
 
-    protected virtual void Update()
-    {
-        _usingDelayTimer.Update(Time.deltaTime);
-
-        const float RotationSpeed = 35f;
-
-        if (_isAnimated && IsEquipped == false)
-            transform.rotation *= Quaternion.AngleAxis(RotationSpeed * Time.deltaTime, Vector3.up);
-    }
+    protected abstract void OnSetOwner(ActorLiving owner);
 
     protected abstract void OnUse();
 
-    protected abstract void OnEquip(Transform parent);
-
-    protected abstract void OnUnequip();
-
-    protected abstract void OnWhileUsing(float currentMS, float maxDelay);
-
-    protected abstract void OnFinishUsing();
-
-    public void SetBlockMode(bool isBlocked)
+    public void SetBlockedMode(bool isBlocked)
     {
-        _blockedToUse = isBlocked;
+        _isBlockedToUse = isBlocked;
     }
 
     public void SetEquipMode(bool canBeEquipped)
@@ -65,39 +43,31 @@ public abstract class Item : MonoBehaviour
         _canBeEquipped = canBeEquipped;
     }
 
-    public void Use()
+    public void SetOwner(ActorLiving owner)
     {
-        if(BlockedToUse == false && IsUsing == false && IsEquipped)
+        Owner = owner;
+
+        OnSetOwner(owner);
+    }
+
+    public void SetTransformToEquip(Transform transform)
+    {
+        TransformToEquip = transform;
+
+        OnSetTransformToEquip(transform);
+    }
+
+    public bool TryUse()
+    {
+        if (_usingDelayTimer.IsRunning == false)
         {
             OnUse();
-            _usingDelayTimer.Start();
+
+            return true;
         }
+
+        return false;
     }
 
-    public void EquipToObject(Transform parent, Transform user)
-    {
-        if (parent is null || user is null && _canBeEquipped == false)
-            return;
-
-        Unequip();
-
-        _user = user;
-        transform.parent = parent;
-        transform.localRotation = Quaternion.Euler(_firstPersonRotation.x, _firstPersonRotation.y, _firstPersonRotation.z);
-        transform.localPosition = _firstPersonOffset;
-
-        OnEquip(parent);
-    }
-
-    public void Unequip()
-    {
-        if(IsEquipped)
-        {
-            transform.parent = null;
-            _user = null;
-
-            OnUnequip();
-        }
-            
-    }
+    public abstract void AcceptDispatch(IItemDispatcher itemDispatcher);
 }

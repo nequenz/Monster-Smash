@@ -298,3 +298,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lifeTime: 3
   _hasLifeTime: 1
+  _explosion: {fileID: 1157233763582000863, guid: 5015ed59e5f4b924eb38708b170eee44, type: 3}
