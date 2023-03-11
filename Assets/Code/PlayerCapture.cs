@@ -9,11 +9,17 @@ public sealed class PlayerCapture : MonoBehaviour
 
 
     public GameCamera AttachedCamera => _gameCamera;
+    public ActorLiving AttachedActor => _capturedActor;
 
 
     private void Awake()
     {
         InitInputs();
+    }
+
+    private void Start()
+    {
+        _capturedActor.SetTransformToEquip(_gameCamera.transform);
     }
 
     private void Update()
@@ -39,7 +45,8 @@ public sealed class PlayerCapture : MonoBehaviour
         _input.AttachAction(-1, () => _capturedActor.Movement.Move(_capturedActor.transform.forward * -1), KeyMode.Hold, KeyCode.S);
         _input.AttachAction(-1, () => _capturedActor.Movement.Move(_capturedActor.transform.right), KeyMode.Hold, KeyCode.D);
         _input.AttachAction(-1, () => _capturedActor.Movement.Move(_capturedActor.transform.right * -1), KeyMode.Hold, KeyCode.A);
-        _input.AttachAction(-1, () => _capturedActor.Movement.Jump(), KeyMode.Hold, KeyCode.Space);
+        _input.AttachAction(-1, _capturedActor.Movement.Jump, KeyMode.Hold, KeyCode.Space);
+        _input.AttachAction(-1, _capturedActor.UseItem, KeyMode.Hold, KeyCode.Mouse0);
 
         _input.AttachAction(-1, () =>
         {

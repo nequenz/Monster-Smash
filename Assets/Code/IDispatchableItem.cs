@@ -2,5 +2,5 @@
 
 public interface IDispatchableItem
 {
-    public void AcceptDispatch(IItemDispatcher itemDispatcher);
+    public void AcceptDispatcher(IItemDispatcher itemDispatcher);
 }
