@@ -38,17 +38,15 @@ public abstract class Item : MonoBehaviour, IDispatchableItem
 
     private void FixedUpdate()
     {
-        const float RotationSpeed = 35f;
+        const float RotationSpeed = 55f;
 
-        if (IsReadyToUse() == false)
-        {
+        if (transform.parent is null && _owner is null)
             transform.rotation *= Quaternion.AngleAxis(RotationSpeed * Time.deltaTime, Vector3.up);
-        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.Is(out ActorLiving actor) && CanBeEquipped)
+        if (transform.parent is null && other.Is(out ActorLiving actor) && CanBeEquipped)
         {
             actor.EquipItem(this);
         }

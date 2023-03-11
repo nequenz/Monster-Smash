@@ -33,8 +33,11 @@ public class EachFrameTimer
 
     public void Start()
     {
-        Started?.Invoke();
-        _currentTime = _timeToRun;
+        if(IsRunning == false)
+        {
+            Started?.Invoke();
+            _currentTime = _timeToRun;
+        }
     }
 
     public void Stop()

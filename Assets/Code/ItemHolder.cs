@@ -5,7 +5,7 @@ using System;
 [Serializable]
 public class ItemHolder
 {
-    [SerializeReference, SubclassSelector] private IItemDispatcher _itemDispatcher = new ItemDispatcher();
+    [SerializeField] private ItemDispatcher _itemDispatcher;
     private ActorLiving _owner;
     private Transform _transformToEquip;
     private Item _currentItem;

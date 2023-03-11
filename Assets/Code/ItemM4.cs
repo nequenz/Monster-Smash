@@ -11,7 +11,13 @@ public sealed class ItemM4 : Item
 
     protected override void OnWhileUsing(float currentDelay, float maxDelay)
     {
-        
+        const float DragFactor = 0.1f;
+
+        Vector3 recoilNormal = transform.localPosition.GetNormalTo(_lastShotDirection);
+        float t = (Mathf.Rad2Deg / 2 / maxDelay) * currentDelay;
+
+        transform.localPosition = FirstPersonOffset;
+        transform.position += recoilNormal * Mathf.Sin(t) * DragFactor;
     }
 
     public override void Use()
@@ -30,7 +36,8 @@ public sealed class ItemM4 : Item
 
             _afterShotVFX.Play();
             _weapon.DescreaseClipAmmo(validAmmo);
-            projectile.SetInitialShotForce(_weapon.CalculateSpread(_directionToShoot, _weapon.SpreadAngles));
+            //projectile.SetInitialShotForce(_weapon.CalculateSpread(_directionToShoot, _weapon.SpreadAngles) * _weapon.ProjectileSpeed);
+            projectile.SetInitialShotForce(_directionToShoot * _weapon.ProjectileSpeed);
             StartUsingTimer();
         }
     }

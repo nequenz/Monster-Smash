@@ -246,7 +246,7 @@ MonoBehaviour:
         _ammoCount: 100
         _ammoClipSize: 50
         _reloadDelay: 3
-        _projectileSpeed: 0
+        _projectileSpeed: 400
         _isAutoReloading: 1
         _angleShotSpread: {x: 5, y: 5, z: 5}
         _reloadDelayTimer:

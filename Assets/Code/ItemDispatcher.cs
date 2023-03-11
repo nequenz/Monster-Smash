@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System;
 
+
 [Serializable]
-public class ItemDispatcher : IItemDispatcher
+public class ItemDispatcher : MonoBehaviour, IItemDispatcher
 {
     [SerializeField] private PlayerCapture _playerCapture;
     private ActorLiving _itemOwner;
@@ -17,7 +18,16 @@ public class ItemDispatcher : IItemDispatcher
 
     public void Invoke()
     {
+        ItemM4Using();
+    }
 
+    public void ItemM4Using()
+    {
+        Vector3 shootDirection = _playerCapture.AttachedCamera.GetAimPosition();
+
+        _itemM4.SetDirectionShoot(shootDirection);
+
+        _itemM4 = null;
     }
 
     public void DispatchItemOwner(ActorLiving actor)
