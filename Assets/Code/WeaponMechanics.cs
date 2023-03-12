@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System;
 
+
 [Serializable]
-public class WeaponPolicy
+public class WeaponMechanics
 {
     [SerializeField] private int _ammoCount = 100;
     [SerializeField] private int _ammoClipSize = 50;
@@ -10,6 +11,7 @@ public class WeaponPolicy
     [SerializeField] private float _projectileSpeed;
     [SerializeField] private bool _isAutoReloading = true;
     [SerializeField] private Vector3 _angleShotSpread;
+    [SerializeField] private Vector3 _shootDirection;
     [SerializeField] private EachFrameTimer _reloadDelayTimer = new();
     [SerializeField] private ProjectileBasic _mainProjectilePrefab;
     [SerializeField] private Transform _mainShootMain;
@@ -22,11 +24,12 @@ public class WeaponPolicy
     public bool IsReloading => _reloadDelayTimer.IsRunning;
     public float ProjectileSpeed => _projectileSpeed;
     public Vector3 SpreadAngles => _angleShotSpread;
+    public Vector3 ShootDirectuin => _shootDirection;
     public ProjectileBasic ProjectilePrefab => _mainProjectilePrefab;
     public Transform MainShootMain => _mainShootMain;
 
 
-    public WeaponPolicy()
+    public WeaponMechanics()
     {
         RedistributeAmmoToClip();
     }
@@ -88,6 +91,11 @@ public class WeaponPolicy
         return Quaternion.Euler(anglesSpread) * nativeDirection;
     }
 
+    public void SetShootDirection(Vector3 direction)
+    {
+        _shootDirection = direction;
+    }
+
     public void SetReloadMode(bool isAuto)
     {
         _isAutoReloading = isAuto;
@@ -107,6 +115,42 @@ public class WeaponPolicy
     {
         if (IsReloading == false)
             _reloadDelayTimer.Start();
+    }
+
+    public ProjectileBasic Shoot(Vector3 direction)
+    {
+        ProjectileBasic projectile = null;
+        int validAmmo;
+
+        validAmmo = CalculateAvailableClipAmmo(1);
+
+        if (validAmmo == 1)
+        {
+            projectile = CreateProjectile(MainShootMain.position);
+
+            projectile.SetInitialShotForce(CalculateSpread(direction, SpreadAngles) * ProjectileSpeed);
+            DescreaseClipAmmo(validAmmo);
+        }
+
+        return projectile;
+    }
+
+    public ProjectileBasic Shoot()
+    {
+        ProjectileBasic projectile = null;
+        int validAmmo;
+
+        validAmmo = CalculateAvailableClipAmmo(1);
+
+        if (validAmmo == 1)
+        {
+            projectile = CreateProjectile(MainShootMain.position);
+
+            projectile.SetInitialShotForce(CalculateSpread(_shootDirection, SpreadAngles) * ProjectileSpeed);
+            DescreaseClipAmmo(validAmmo);
+        }
+
+        return projectile;
     }
 
 }

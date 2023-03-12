@@ -10,10 +10,13 @@ public class ProjectileBullet : ProjectileBasic
     private void FixedUpdate()
     {
         RaycastHit hit = Raycast(2f);
+        Vector3 validContactPoint;
 
-        if(hit.collider is not null && hit.collider.Is(out TestObject body))
+        if(hit.collider is not null && hit.collider.Is(out ActorVoxelBody body))
         {
-            body.AttachedVoxelBody.SetVoxel(hit.point,IVoxelVolume.Empty);
+            validContactPoint = transform.position.GetNormalTo(hit.point) * 0.1f;
+
+            body.AttachedVoxelBody.SetVoxel(hit.point + validContactPoint, IVoxelVolume.Empty);
             Destroy(gameObject);
         }
     }

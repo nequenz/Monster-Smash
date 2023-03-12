@@ -18,10 +18,10 @@ public class VoxelBody
 
     public void Init()
     {
-        _voxels = VoxelPrefab.GetMatchedVoxels(_prefabToLoad);
+        _voxels = VoxelModels.GetMatchedVoxels(_prefabToLoad);
 
         _mesh.SetVoxelVolume(_voxels);
-        _mesh.SetColorVolume(_voxels.PrefabToBuild);
+        _mesh.SetColorVolume(_voxels.ModelToBuild);
         _mesh.RebuildForced();
 
         _transform.SetVolume(_voxels);
@@ -51,9 +51,9 @@ public class VoxelBody
         return _voxels.GetValue(_transform.CalculateVoxelPosition(position));
     }
 
-    public void CalibrateParticle(VoxelParticle particle, Vector3 position)
+    public void CalibrateParticle(VoxelParticle particle, Vector3 explosionPosition)
     {
-        particle.SetParams(_mesh.FaceSize, Color.white, position);
+        particle.SetParams(_mesh.FaceSize, Color.white, explosionPosition);
     }
 
 }

@@ -2,7 +2,7 @@
 
 
 [RequireComponent(typeof(MeshCollider))]
-public class TestObject : MonoBehaviour
+public class ActorVoxelBody : MonoBehaviour
 {
     [SerializeReference, SubclassSelector] private VoxelBody _voxelBody = new();
     [SerializeField] private VoxelParticle _voxelParticlePrefab;
@@ -29,7 +29,6 @@ public class TestObject : MonoBehaviour
     private void Update()
     {
         _voxelBody.Update(Time.deltaTime);
-        transform.rotation *= Quaternion.AngleAxis(Time.deltaTime * 25, Vector3.one);
     }
 
     private void OnVoxelBodyChanged(Vector3Int position)
@@ -40,5 +39,9 @@ public class TestObject : MonoBehaviour
         _voxelBody.CalibrateParticle(particle, position);
     }
 
+    private void OnDrawGizmos()
+    {
+        //Gizmos.DrawCube
+    }
 
 }

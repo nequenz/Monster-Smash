@@ -21,6 +21,6 @@ public sealed class ItemTelepoter : Item
 
     public override void AcceptDispatcher(IItemDispatcher itemDispatcher)
     {
-        itemDispatcher.Dispatch(this);
+        //itemDispatcher.Dispatch(this);
     }
 }

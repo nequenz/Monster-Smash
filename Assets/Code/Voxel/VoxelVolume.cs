@@ -9,7 +9,7 @@ public class VoxelVolume : IVoxelVolume
     [SerializeField] private bool _canBeReallocated = false;
     private Vector3Int _size;
     private BitArray[,] _bits;
-    private IVolumeReadOnly<Color> _prefabToBuild;
+    private IVolumeReadOnly<Color> _modelToBuild;
     private bool _isChangeEventEnabled = true;
 
 
@@ -17,7 +17,7 @@ public class VoxelVolume : IVoxelVolume
     public event Action Matched;
 
 
-    public IVolumeReadOnly<Color> PrefabToBuild => _prefabToBuild;
+    public IVolumeReadOnly<Color> ModelToBuild => _modelToBuild;
     public bool UndefinedValue => false;
     public bool CanBeReallocated => _canBeReallocated;
     public Vector3 Size => _size;
@@ -33,7 +33,7 @@ public class VoxelVolume : IVoxelVolume
 
     public IVoxelVolume Init(IVolumeReadOnly<Color> colorPrefab, bool canBeReallocated)
     {
-        SetVolumePrefabToBuild(colorPrefab);
+        SetVolumeModelToBuild(colorPrefab);
         _canBeReallocated = canBeReallocated;
 
         return this;
@@ -43,11 +43,11 @@ public class VoxelVolume : IVoxelVolume
     {
         Vector3Int size = default;
 
-        if(_prefabToBuild is not null)
+        if(_modelToBuild is not null)
         {
-            size.x = (int)_prefabToBuild.Size.x;
-            size.y = (int)_prefabToBuild.Size.y;
-            size.z = (int)_prefabToBuild.Size.z;
+            size.x = (int)_modelToBuild.Size.x;
+            size.y = (int)_modelToBuild.Size.y;
+            size.z = (int)_modelToBuild.Size.z;
 
             Allocate(size, IVoxelVolume.Empty);
         }
@@ -73,9 +73,9 @@ public class VoxelVolume : IVoxelVolume
         }
     }
 
-    public void MatchToPrefab()
+    public void MatchToModel()
     {
-        if (_prefabToBuild is null)
+        if (_modelToBuild is null)
             return;
 
         _isChangeEventEnabled = false;
@@ -86,7 +86,7 @@ public class VoxelVolume : IVoxelVolume
             {
                 for (int y = 0; y < _size.y; y++)
                 {
-                    if (_prefabToBuild.GetValue(x, y, z) != _prefabToBuild.UndefinedValue)
+                    if (_modelToBuild.GetValue(x, y, z) != _modelToBuild.UndefinedValue)
                         SetValue(new Vector3Int(x, y, z), IVoxelVolume.Full);
                 }
             }
@@ -115,7 +115,7 @@ public class VoxelVolume : IVoxelVolume
         }
     }
 
-    public void SetVolumePrefabToBuild(IVolumeReadOnly<Color> colorPrefab) => _prefabToBuild = colorPrefab;
+    public void SetVolumeModelToBuild(IVolumeReadOnly<Color> colorPrefab) => _modelToBuild = colorPrefab;
 
     public bool GetValue(Vector3Int position)
     {

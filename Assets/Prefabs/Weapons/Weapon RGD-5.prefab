@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 7638511899229807029}
   - component: {fileID: 7638511899230774133}
   - component: {fileID: 5926783528171194392}
+  - component: {fileID: 6476174171268072298}
   m_Layer: 0
   m_Name: Weapon RGD-5
   m_TagString: Untagged
@@ -194,7 +195,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7638511899228519861}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.5506883, y: 0.563, z: -1.0583454}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -267,6 +268,42 @@ CapsuleCollider:
   m_Height: 0.15676454
   m_Direction: 1
   m_Center: {x: 0, y: 0.027264815, z: 0}
+--- !u!114 &6476174171268072298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7638511899228519861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89cbdba37d7462248bc9d9eca405a480, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _firstPersonOffset: {x: 0.15, y: -0.09, z: 0.3}
+  _firstPersonRotation: {x: 15, y: 15, z: 15}
+  _isBlockedToUse: 0
+  _canBeEquipped: 1
+  _usingDelayTimer:
+    _timeToRun: 3
+  _weaponMechanics:
+    rid: 6576305754375192590
+  references:
+    version: 2
+    RefIds:
+    - rid: 6576305754375192590
+      type: {class: WeaponMechanics, ns: , asm: Assembly-CSharp}
+      data:
+        _ammoCount: 50
+        _ammoClipSize: 50
+        _reloadDelay: 3
+        _projectileSpeed: 700
+        _isAutoReloading: 1
+        _angleShotSpread: {x: 0, y: 0, z: 0}
+        _reloadDelayTimer:
+          _timeToRun: 3
+        _mainProjectilePrefab: {fileID: 808821575497571163, guid: 27e634561f5430149b96c32db8ad22b2, type: 3}
+        _mainShootMain: {fileID: 7638511899311826446}
 --- !u!1 &7638511899311826445
 GameObject:
   m_ObjectHideFlags: 0

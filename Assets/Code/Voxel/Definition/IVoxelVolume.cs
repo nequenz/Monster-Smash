@@ -10,11 +10,11 @@ public interface IVoxelVolume : IVolume<bool>
     public event Action Matched;
 
 
-    public IVolumeReadOnly<Color> PrefabToBuild { get; }
+    public IVolumeReadOnly<Color> ModelToBuild { get; }
 
     public IVoxelVolume Init(IVolumeReadOnly<Color> prefabToBuild, bool canBeReallocated);
 
-    public void SetVolumePrefabToBuild(IVolumeReadOnly<Color> prefabToBuild);
+    public void SetVolumeModelToBuild(IVolumeReadOnly<Color> prefabToBuild);
 
-    public void MatchToPrefab();
+    public void MatchToModel();
 }

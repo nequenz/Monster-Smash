@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public sealed class ProjectileGrenade : ProjectileBasic
+public sealed class ProjectileThrowable : ProjectileBasic
 {
     [SerializeField] private Explosion _explosion;
 
